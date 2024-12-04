@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<!-- saved from url=(0026)http://vacunas.test/turnos -->
+<html lang="en" dir="ltr" style="--primary01: rgba(143, 189, 86, 0.1); --primary02: rgba(143, 189, 86, 0.2); --primary03: rgba(143, 189, 86, 0.3); --primary06: rgba(143, 189, 86, 0.6); --primary09: rgba(143, 189, 86, 0.9);"><!-- This "app.blade.php" master page is used for all the pages content present in "views/livewire" except "custom" and "switcher" pages --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<!-- META DATA -->
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="description" content="{{env('APP_NAME')}}">
+		<meta name="keywords" content="Secretaría, Trabajo, corrientes">
+        
+        <!-- TITLE -->
+		<title>{{env('APP_NAME')}}</title>
+
+        <!-- FAVICON -->
+        <link rel="shortcut icon" type="image/x-icon" href="http://vacunas.test/assets/images/brand/favicon-32x32.png">
+
+        <!-- BOOTSTRAP CSS -->
+        <link id="style" href="./Rilla_files/bootstrap.min.css" rel="stylesheet">
+
+        <!-- STYLE CSS -->
+        <link href="./Rilla_files/style.css" rel="stylesheet">
+        <link href="./Rilla_files/skin-modes.css" rel="stylesheet">
+
+        
+        <!--- FONT-ICONS CSS -->
+        <link href="./Rilla_files/icons.css" rel="stylesheet">
+        <!-- Livewire Styles -->
+<style>
+    [wire\:loading], [wire\:loading\.delay], [wire\:loading\.inline-block], [wire\:loading\.inline], [wire\:loading\.block], [wire\:loading\.flex], [wire\:loading\.table], [wire\:loading\.grid], [wire\:loading\.inline-flex] {
+        display: none;
+    }
+
+    [wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short], [wire\:loading\.delay\.long], [wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest] {
+        display:none;
+    }
+
+    [wire\:offline] {
+        display: none;
+    }
+
+    [wire\:dirty]:not(textarea):not(input):not(select) {
+        display: none;
+    }
+
+    input:-webkit-autofill, select:-webkit-autofill, textarea:-webkit-autofill {
+        animation-duration: 50000s;
+        animation-name: livewireautofill;
+    }
+
+    @keyframes livewireautofill { from {} }
+</style>
+
+    <style type="text/css">.apexcharts-canvas {
+  position: relative;
+  user-select: none;
+  /* cannot give overflow: hidden as it will crop tooltips which overflow outside chart area */
+}
+
+/* scrollbar is not visible by default for legend, hence forcing the visibility */
+.apexcharts-canvas ::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 6px;
+}
+.apexcharts-canvas ::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0,0,0,.5);
+  box-shadow: 0 0 1px rgba(255,255,255,.5);
+  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+.apexcharts-canvas.dark {
+  background: #343F57;
+}
+
+.apexcharts-inner {
+  position: relative;
+}
+
+.legend-mouseover-inactive {
+  transition: 0.15s ease all;
+  opacity: 0.20;
+}
+
+.apexcharts-series-collapsed {
+  opacity: 0;
+}
+
+.apexcharts-gridline, .apexcharts-text {
+  pointer-events: none;
+}
+
+.apexcharts-tooltip {
+  border-radius: 5px;
+  box-shadow: 2px 2px 6px -4px #999;
+  cursor: default;
+  font-size: 14px;
+  left: 62px;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 12;
+  transition: 0.15s ease all;
+}
+.apexcharts-tooltip.light {
+  border: 1px solid #e3e3e3;
+  background: rgba(255, 255, 255, 0.96);
+}
+.apexcharts-tooltip.dark {
+  color: #fff;
+  background: rgba(30,30,30, 0.8);
+}
+.apexcharts-tooltip * {
+  font-family: inherit;
+}
+
+.apexcharts-tooltip .apexcharts-marker,
+.apexcharts-area-series .apexcharts-area,
+.apexcharts-line {
+  pointer-events: none;
+}
+
+.apexcharts-tooltip.active {
+  opacity: 1;
+  transition: 0.15s ease all;
+}
+
+.apexcharts-tooltip-title {
+  padding: 6px;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.apexcharts-tooltip.light .apexcharts-tooltip-title {
+  background: #ECEFF1;
+  border-bottom: 1px solid #ddd;
+}
+.apexcharts-tooltip.dark .apexcharts-tooltip-title {
+  background: rgba(0, 0, 0, 0.7);
+  border-bottom: 1px solid #333;
+}
+
+.apexcharts-tooltip-text-value,
+.apexcharts-tooltip-text-z-value {
+  display: inline-block;
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+.apexcharts-tooltip-text-z-label:empty,
+.apexcharts-tooltip-text-z-value:empty {
+  display: none;
+}
+
+.apexcharts-tooltip-text-value,
+.apexcharts-tooltip-text-z-value {
+  font-weight: 600;
+}
+
+.apexcharts-tooltip-marker {
+  width: 12px;
+  height: 12px;
+  position: relative;
+  top: 0px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.apexcharts-tooltip-series-group {
+  padding: 0 10px;
+  display: none;
+  text-align: left;
+  justify-content: left;
+  align-items: center;
+}
+
+.apexcharts-tooltip-series-group.active .apexcharts-tooltip-marker {
+  opacity: 1;
+}
+.apexcharts-tooltip-series-group.active, .apexcharts-tooltip-series-group:last-child {
+  padding-bottom: 4px;
+}
+.apexcharts-tooltip-series-group-hidden {
+  opacity: 0;
+  height: 0;
+  line-height: 0;
+  padding: 0 !important;
+}
+.apexcharts-tooltip-y-group {
+  padding: 6px 0 5px;
+}
+.apexcharts-tooltip-candlestick {
+  padding: 4px 8px;
+}
+.apexcharts-tooltip-candlestick > div {
+  margin: 4px 0;
+}
+.apexcharts-tooltip-candlestick span.value {
+  font-weight: bold;
+}
+
+.apexcharts-tooltip-rangebar {
+  padding: 5px 8px;
+}
+
+.apexcharts-tooltip-rangebar .category {
+  font-weight: 600;
+  color: #777;
+}
+
+.apexcharts-tooltip-rangebar .series-name {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.apexcharts-xaxistooltip {
+  opacity: 0;
+  padding: 9px 10px;
+  pointer-events: none;
+  color: #373d3f;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+  background: #ECEFF1;
+  border: 1px solid #90A4AE;
+  transition: 0.15s ease all;
+}
+
+.apexcharts-xaxistooltip.dark {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.apexcharts-xaxistooltip:after, .apexcharts-xaxistooltip:before {
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.apexcharts-xaxistooltip:after {
+  border-color: rgba(236, 239, 241, 0);
+  border-width: 6px;
+  margin-left: -6px;
+}
+.apexcharts-xaxistooltip:before {
+  border-color: rgba(144, 164, 174, 0);
+  border-width: 7px;
+  margin-left: -7px;
+}
+
+.apexcharts-xaxistooltip-bottom:after, .apexcharts-xaxistooltip-bottom:before {
+  bottom: 100%;
+}
+
+.apexcharts-xaxistooltip-top:after, .apexcharts-xaxistooltip-top:before {
+  top: 100%;
+}
+
+.apexcharts-xaxistooltip-bottom:after {
+  border-bottom-color: #ECEFF1;
+}
+.apexcharts-xaxistooltip-bottom:before {
+  border-bottom-color: #90A4AE;
+}
+
+.apexcharts-xaxistooltip-bottom.dark:after {
+  border-bottom-color: rgba(0, 0, 0, 0.5);
+}
+.apexcharts-xaxistooltip-bottom.dark:before {
+  border-bottom-color: rgba(0, 0, 0, 0.5);
+}
+
+.apexcharts-xaxistooltip-top:after {
+  border-top-color:#ECEFF1
+}
+.apexcharts-xaxistooltip-top:before {
+  border-top-color: #90A4AE;
+}
+.apexcharts-xaxistooltip-top.dark:after {
+  border-top-color:rgba(0, 0, 0, 0.5);
+}
+.apexcharts-xaxistooltip-top.dark:before {
+  border-top-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.apexcharts-xaxistooltip.active {
+  opacity: 1;
+  transition: 0.15s ease all;
+}
+
+.apexcharts-yaxistooltip {
+  opacity: 0;
+  padding: 4px 10px;
+  pointer-events: none;
+  color: #373d3f;
+  font-size: 13px;
+  text-align: center;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+  background: #ECEFF1;
+  border: 1px solid #90A4AE;
+}
+
+.apexcharts-yaxistooltip.dark {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.apexcharts-yaxistooltip:after, .apexcharts-yaxistooltip:before {
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.apexcharts-yaxistooltip:after {
+  border-color: rgba(236, 239, 241, 0);
+  border-width: 6px;
+  margin-top: -6px;
+}
+.apexcharts-yaxistooltip:before {
+  border-color: rgba(144, 164, 174, 0);
+  border-width: 7px;
+  margin-top: -7px;
+}
+
+.apexcharts-yaxistooltip-left:after, .apexcharts-yaxistooltip-left:before {
+  left: 100%;
+}
+
+.apexcharts-yaxistooltip-right:after, .apexcharts-yaxistooltip-right:before {
+  right: 100%;
+}
+
+.apexcharts-yaxistooltip-left:after {
+  border-left-color: #ECEFF1;
+}
+.apexcharts-yaxistooltip-left:before {
+  border-left-color: #90A4AE;
+}
+.apexcharts-yaxistooltip-left.dark:after {
+  border-left-color: rgba(0, 0, 0, 0.5);
+}
+.apexcharts-yaxistooltip-left.dark:before {
+  border-left-color: rgba(0, 0, 0, 0.5);
+}
+
+.apexcharts-yaxistooltip-right:after {
+  border-right-color: #ECEFF1;
+}
+.apexcharts-yaxistooltip-right:before {
+  border-right-color: #90A4AE;
+}
+.apexcharts-yaxistooltip-right.dark:after {
+  border-right-color: rgba(0, 0, 0, 0.5);
+}
+.apexcharts-yaxistooltip-right.dark:before {
+  border-right-color: rgba(0, 0, 0, 0.5);
+}
+
+.apexcharts-yaxistooltip.active {
+  opacity: 1;
+}
+.apexcharts-yaxistooltip-hidden {
+  display: none;
+}
+
+.apexcharts-xcrosshairs, .apexcharts-ycrosshairs {
+  pointer-events: none;
+  opacity: 0;
+  transition: 0.15s ease all;
+}
+
+.apexcharts-xcrosshairs.active, .apexcharts-ycrosshairs.active {
+  opacity: 1;
+  transition: 0.15s ease all;
+}
+
+.apexcharts-ycrosshairs-hidden {
+  opacity: 0;
+}
+
+.apexcharts-zoom-rect {
+  pointer-events: none;
+}
+.apexcharts-selection-rect {
+  cursor: move;
+}
+
+.svg_select_points, .svg_select_points_rot {
+  opacity: 0;
+  visibility: hidden;
+}
+.svg_select_points_l, .svg_select_points_r {
+  cursor: ew-resize;
+  opacity: 1;
+  visibility: visible;
+  fill: #888;
+}
+.apexcharts-canvas.zoomable .hovering-zoom {
+  cursor: crosshair
+}
+.apexcharts-canvas.zoomable .hovering-pan {
+  cursor: move
+}
+
+.apexcharts-xaxis,
+.apexcharts-yaxis {
+  pointer-events: none;
+}
+
+.apexcharts-zoom-icon,
+.apexcharts-zoom-in-icon,
+.apexcharts-zoom-out-icon,
+.apexcharts-reset-zoom-icon,
+.apexcharts-pan-icon,
+.apexcharts-selection-icon,
+.apexcharts-menu-icon,
+.apexcharts-toolbar-custom-icon {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  line-height: 24px;
+  color: #6E8192;
+  text-align: center;
+}
+
+
+.apexcharts-zoom-icon svg,
+.apexcharts-zoom-in-icon svg,
+.apexcharts-zoom-out-icon svg,
+.apexcharts-reset-zoom-icon svg,
+.apexcharts-menu-icon svg {
+  fill: #6E8192;
+}
+.apexcharts-selection-icon svg {
+  fill: #444;
+  transform: scale(0.76)
+}
+
+.dark .apexcharts-zoom-icon svg,
+.dark .apexcharts-zoom-in-icon svg,
+.dark .apexcharts-zoom-out-icon svg,
+.dark .apexcharts-reset-zoom-icon svg,
+.dark .apexcharts-pan-icon svg,
+.dark .apexcharts-selection-icon svg,
+.dark .apexcharts-menu-icon svg,
+.dark .apexcharts-toolbar-custom-icon svg{
+  fill: #f3f4f5;
+}
+
+.apexcharts-canvas .apexcharts-zoom-icon.selected svg,
+.apexcharts-canvas .apexcharts-selection-icon.selected svg,
+.apexcharts-canvas .apexcharts-reset-zoom-icon.selected svg {
+  fill: #008FFB;
+}
+.light .apexcharts-selection-icon:not(.selected):hover svg,
+.light .apexcharts-zoom-icon:not(.selected):hover svg,
+.light .apexcharts-zoom-in-icon:hover svg,
+.light .apexcharts-zoom-out-icon:hover svg,
+.light .apexcharts-reset-zoom-icon:hover svg,
+.light .apexcharts-menu-icon:hover svg {
+  fill: #333;
+}
+
+.apexcharts-selection-icon, .apexcharts-menu-icon {
+  position: relative;
+}
+.apexcharts-reset-zoom-icon {
+  margin-left: 5px;
+}
+.apexcharts-zoom-icon, .apexcharts-reset-zoom-icon, .apexcharts-menu-icon {
+  transform: scale(0.85);
+}
+
+.apexcharts-zoom-in-icon, .apexcharts-zoom-out-icon {
+  transform: scale(0.7)
+}
+
+.apexcharts-zoom-out-icon {
+  margin-right: 3px;
+}
+
+.apexcharts-pan-icon {
+  transform: scale(0.62);
+  position: relative;
+  left: 1px;
+  top: 0px;
+}
+.apexcharts-pan-icon svg {
+  fill: #fff;
+  stroke: #6E8192;
+  stroke-width: 2;
+}
+.apexcharts-pan-icon.selected svg {
+  stroke: #008FFB;
+}
+.apexcharts-pan-icon:not(.selected):hover svg {
+  stroke: #333;
+}
+
+.apexcharts-toolbar {
+  position: absolute;
+  z-index: 11;
+  top: 0px;
+  right: 3px;
+  max-width: 176px;
+  text-align: right;
+  border-radius: 3px;
+  padding: 0px 6px 2px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.apexcharts-toolbar svg {
+  pointer-events: none;
+}
+
+.apexcharts-menu {
+  background: #fff;
+  position: absolute;
+  top: 100%;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 3px;
+  right: 10px;
+  opacity: 0;
+  min-width: 110px;
+  transition: 0.15s ease all;
+  pointer-events: none;
+}
+
+.apexcharts-menu.open {
+  opacity: 1;
+  pointer-events: all;
+  transition: 0.15s ease all;
+}
+
+.apexcharts-menu-item {
+  padding: 6px 7px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.light .apexcharts-menu-item:hover {
+  background: #eee;
+}
+.dark .apexcharts-menu {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+}
+
+@media screen and (min-width: 768px) {
+  .apexcharts-toolbar {
+    /*opacity: 0;*/
+  }
+
+  .apexcharts-canvas:hover .apexcharts-toolbar {
+    opacity: 1;
+  }
+}
+
+.apexcharts-datalabel.hidden {
+  opacity: 0;
+}
+
+.apexcharts-pie-label,
+.apexcharts-datalabel, .apexcharts-datalabel-label, .apexcharts-datalabel-value {
+  cursor: default;
+  pointer-events: none;
+}
+
+.apexcharts-pie-label-delay {
+  opacity: 0;
+  animation-name: opaque;
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease;
+}
+
+.apexcharts-canvas .hidden {
+  opacity: 0;
+}
+
+.apexcharts-hide .apexcharts-series-points {
+  opacity: 0;
+}
+
+.apexcharts-area-series .apexcharts-series-markers .apexcharts-marker.no-pointer-events,
+.apexcharts-line-series .apexcharts-series-markers .apexcharts-marker.no-pointer-events, .apexcharts-radar-series path, .apexcharts-radar-series polygon {
+  pointer-events: none;
+}
+
+/* markers */
+
+.apexcharts-marker {
+  transition: 0.15s ease all;
+}
+
+@keyframes opaque {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Resize generated styles */
+@keyframes resizeanim {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.resize-triggers {
+  animation: 1ms resizeanim;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.resize-triggers, .resize-triggers > div, .contract-trigger:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.resize-triggers > div {
+  background: #eee;
+  overflow: auto;
+}
+
+.contract-trigger:before {
+  width: 200%;
+  height: 200%;
+}
+</style><style>.tippy-box[data-animation=fade][data-state=hidden]{opacity:0}[data-tippy-root]{max-width:calc(100vw - 10px)}.tippy-box{position:relative;background-color:#333;color:#fff;border-radius:4px;font-size:14px;line-height:1.4;white-space:normal;outline:0;transition-property:transform,visibility,opacity}.tippy-box[data-placement^=top]>.tippy-arrow{bottom:0}.tippy-box[data-placement^=top]>.tippy-arrow:before{bottom:-7px;left:0;border-width:8px 8px 0;border-top-color:initial;transform-origin:center top}.tippy-box[data-placement^=bottom]>.tippy-arrow{top:0}.tippy-box[data-placement^=bottom]>.tippy-arrow:before{top:-7px;left:0;border-width:0 8px 8px;border-bottom-color:initial;transform-origin:center bottom}.tippy-box[data-placement^=left]>.tippy-arrow{right:0}.tippy-box[data-placement^=left]>.tippy-arrow:before{border-width:8px 0 8px 8px;border-left-color:initial;right:-7px;transform-origin:center left}.tippy-box[data-placement^=right]>.tippy-arrow{left:0}.tippy-box[data-placement^=right]>.tippy-arrow:before{left:-7px;border-width:8px 8px 8px 0;border-right-color:initial;transform-origin:center right}.tippy-box[data-inertia][data-state=visible]{transition-timing-function:cubic-bezier(.54,1.5,.38,1.11)}.tippy-arrow{width:16px;height:16px;color:#333}.tippy-arrow:before{content:"";position:absolute;border-color:transparent;border-style:solid}.tippy-content{position:relative;padding:5px 9px;z-index:1}</style><style>.tippy-box[data-theme~='uphint'] {
+    background-color: #15C97F;
+}</style><style>.controller-container {
+    position: fixed;
+    width: 100%;
+    top: 88vh;
+    display: flex;
+    padding: 0 40px;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.controller-container-reverse {
+    justify-content: flex-end;
+}
+
+.controller-logo-container {
+    width: auto;
+    height: auto;
+    z-index: 4;
+    display: flex;
+}
+
+.controller-logo-container-reverse {
+    flex-direction: row-reverse;
+}
+
+.controller-content-control {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.controller-content {
+    background-color: white;
+    border: 2px solid #15c97f;
+    border-radius: 50px;
+    top: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    margin: 0px 10px;
+    padding: 10px 15px;
+    transition: all 1s 0s ease-in;
+    box-shadow: 0px 1px 4px rgb(0 0 0 / 25%);
+}
+
+.controller-content-reverse {
+    flex-direction: row-reverse;
+}
+
+.controller-horizontal-margin {
+    margin: 0 20px;
+}
+
+.controller-logo {
+    top: -7px;
+    width: 60px;
+    height: 60px;
+    border-radius: 115px;
+    background-color: #15c97f;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    position: absolute;
+    box-shadow: 0px 1px 4px rgb(0 0 0 / 25%);
+}
+
+.controller-logo-paused {
+    background-color: #f5c04b;
+}
+
+.img-inherit-size {
+    width: inherit;
+    height: inherit;
+}
+
+.controller-start-icon {
+    height: 40px;
+    width: 40px;
+}
+
+.controller-separator {
+    width: 2px;
+    background-color: #ededed;
+    height: 30px;
+    margin: 0px 4px;
+}
+
+.controller-delete-icon {
+    border-radius: 90px;
+    background-color: #c91515;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controller-delete-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+.controller-done-icon {
+    border-radius: 90px;
+    background-color: #15C97F;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.controller-done-icon img {
+    width: 20px;
+    height: 20px;
+}
+
+.controller-count-bubble {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    z-index: 5;
+}
+
+.controller-steps-count {
+    width: 20px;
+    height: 20px;
+    border-radius: 90px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #f7f7f7;
+    color: #5c5c5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 900;
+}
+</style><style>body.hide-uphint-ext .uphint-ext-ignore-capture {
+    display: none;
+}
+
+.ext-uphint .main_button {
+    width: 206px !important;
+    height: 45px !important;
+    left: 1181px !important;
+    top: 214px !important;
+    cursor: pointer !important;
+    background: #15C97F !important;
+    border-radius: 100px !important;
+    border: 0px !important;
+}
+
+.ext-uphint-shadow-root{
+    margin: 15px 30px 0px 0px;
+    background: #ffffff;
+    z-index: 90000000000;
+    border-radius: 11px;
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+.display-none{
+    display: none!important;
+}
+
+.ext-uphint-circle {
+    position: absolute !important;
+    height: 30px !important;
+    width: 30px !important;
+    background: none !important;
+    border-radius: 100px !important;
+    border: 2px solid !important;
+    border-color: #15C97F !important;
+    z-index: 2147483647 !important;
+    pointer-events: none;
+}
+
+.ext-uphint .main_button:hover {
+    background: #0e8d58 !important;
+}
+
+.ext-uphint .button-flex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+    margin: 5px;
+}
+
+.ext-uphint .main_text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 29px;
+    /* or 204% */
+    color: #FFFFFF;
+}
+
+.ext-uphint .button-icon {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: unset;
+    height: unset;
+}
+
+.ext-uphint .button-icon img {
+    margin-left: 14px;
+    width: unset;
+}
+
+.ext-uphint .button_drawer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.ext-uphint .button_drawer_horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.ext-uphint .flex_container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 11px 15px;
+}
+
+.ext-uphint .info_drawer {
+    justify-content: flex-start;
+}
+
+.ext-uphint .info_drawer_end {
+    justify-content: flex-end;
+}
+
+.ext-uphint .info_text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 21px;
+    color: #FFFFFF;
+}
+
+.ext-uphint .button_drawer button {
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.ext-uphint .button_drawer p {
+    text-align: center;
+}
+
+.ext-uphint .button_drawer_horizontal button {
+    margin: 10px !important;
+    cursor: pointer;
+}
+
+.ext-uphint .secondary_button {
+    width: 206px !important;
+    height: 45px !important;
+    left: 1181px !important;
+    top: 274px !important;
+    cursor: pointer;
+    border: 1px solid #566789 !important;
+    box-sizing: border-box;
+    border-radius: 100px !important;
+    background: #FFFFFF !important;
+}
+
+.ext-uphint .secondary_button:hover {
+    background: #f3f3f3 !important;
+}
+
+.ext-uphint .secondary_text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 18px;
+    /* or 130% */
+    color: #566789;
+}
+
+.ext-uphint .tertiary_button {
+    width: 206px !important;
+    height: 45px !important;
+    left: 1181px !important;
+    top: 274px !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: 0
+}
+
+.ext-uphint .tertiary_button:hover {
+    background: #f3f3f3 !important;
+}
+
+.ext-uphint .outline_button {
+    width: 136px !important;
+    height: 42px !important;
+    background: #FFFFFF !important;
+    border: 1px solid rgba(86, 103, 137, 0.26) !important;
+    box-sizing: border-box !important;
+    padding: 6px 16px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+}
+
+.ext-uphint .outline_button:hover {
+    background: #f3f3f3 !important;
+}
+
+.ext-uphint .outline_text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: rgba(21, 25, 32, 0.5);
+}
+
+.ext-uphint .warning_button {
+    width: 136px !important;
+    height: 42px !important;
+    padding: 6px 16px !important;
+    background: #FF6058 !important;
+    border: 0px !important;
+    box-sizing: border-box;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+}
+
+.ext-uphint .warning_button:hover {
+    background: #dd514a !important;
+}
+
+.warning_text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    color: #FFFFFF !important;
+}
+
+.ext-uphint .tertiary_text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 29px;
+    /* or 204% */
+    color: #FF6058 !important;
+}
+
+.ext-uphint .padding-1 {
+    padding-top: 44px;
+    padding-bottom: 34px;
+}
+
+.ext-uphint .padding-top-1 {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.ext-uphint .delete-warning {
+    padding: 0 14px;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 20px;
+    /* Mid Emphasis */
+    color: rgba(21, 25, 32, 0.5);
+}
+
+.ext-uphint .icon-bubble {
+    height: 56px;
+    width: 56px;
+    background: rgba(55, 73, 87, 0.2);
+    border-radius: 50%;
+    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.ext-uphint img {
+    filter: none !important;
+}
+
+.spinner-logo {
+    width: 112px;
+    margin-bottom: 20px;
+    animation-name: spin;
+    animation-duration: 5000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    /* transform: rotate(3deg); */
+    /* transform: rotate(0.3rad);/ */
+    /* transform: rotate(3grad); */
+    /* transform: rotate(.03turn);  */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+</style><style>@import url(https://fonts.googleapis.com/css?family=Montserrat);</style><style>.App-ext {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+  height: 100%;
+  padding: 10px;
+  background-color: #282c34;
+  width: unset;
+}
+
+#root-ext{
+  position: relative  ;
+  background: #FFFFFF;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 11px;
+  background: linear-gradient(292.87deg, rgba(0, 117, 255, 0.1) 0%, rgba(255, 255, 255, 0.52) 25.01%, rgba(255, 255, 255, 0.85) 29.73%, #FFFFFF 34.68%);
+}
+
+.App-logo {
+  height: 30vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style></head>
+
+    <body class="ltr app sidebar-mini light-mode" style=""><div class="horizontalMenucontainer">
+
+        <!-- GLOBAL-LOADER -->
+		<div id="global-loader" style="display: none;">
+			<img src="./Rilla_files/loader.svg" class="loader-img" alt="Loader">
+		</div>
+		<!-- /GLOBAL-LOADER -->
+
+        <!-- PAGE -->
+		<div class="page">
+			<div class="page-main">
+
+                <!-- app-Header -->
+            <div class="app-header header sticky" style="margin-bottom: -74px;">
+                <div class="container-fluid main-container">
+                    <div class="d-flex">
+                        <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="http://vacunas.test/turnos#"></a>
+                        <!-- sidebar-toggle-->
+                        <a class="logo-horizontal " href="http://vacunas.test/">
+                            <img src="./Rilla_files/logo-3.png" class="header-brand-img desktop-logo" alt="logo">
+                            <img src="./Rilla_files/logo-3.png" class="header-brand-img light-logo1" alt="logo">
+                        </a>
+                        <div class="d-flex order-lg-2 ms-auto header-right-icons">
+							
+                            <button class="navbar-toggler navresponsive-toggler d-md-none ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent-4" aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon fe fe-more-vertical"></span>
+                            </button>
+                            <div class="navbar navbar-collapse responsive-navbar p-0">
+                                <div class="collapse navbar-collapse" id="navbarSupportedContent-4">
+                                    <div class="d-flex order-lg-2">
+                                        <div class="dropdown  d-flex">
+                                            <a class="nav-link icon theme-layout nav-link-bg layout-setting">
+                                                <span class="dark-layout">
+													<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M22.0482178,13.2746582c-0.1265259-0.2453003-0.4279175-0.3416138-0.6732178-0.2150879C20.1774902,13.6793823,18.8483887,14.0019531,17.5,14c-0.8480835-0.0005493-1.6913452-0.1279297-2.50177-0.3779297c-4.4887085-1.3847046-7.0050049-6.1460571-5.6203003-10.6347656c0.0320435-0.1033325,0.0296021-0.2142944-0.0068359-0.3161621C9.2781372,2.411377,8.9921875,2.2761841,8.7324219,2.3691406C4.6903076,3.800293,1.9915771,7.626709,2,11.9146729C2.0109863,17.4956055,6.5440674,22.0109863,12.125,22c4.9342651,0.0131226,9.1534424-3.5461426,9.9716797-8.4121094C22.1149292,13.4810181,22.0979614,13.3710327,22.0482178,13.2746582z M16.0877075,20.0958252c-4.5321045,2.1853027-9.9776611,0.2828979-12.1630249-4.2492065S3.6417236,5.8689575,8.1738281,3.6835938C8.0586548,4.2776489,8.0004272,4.8814087,8,5.4865723C7.9962769,10.7369385,12.2495728,14.9962769,17.5,15c1.1619263,0.0023193,2.3140869-0.2119751,3.3974609-0.6318359C20.1879272,16.8778076,18.4368896,18.9630127,16.0877075,20.0958252z"></path></svg>
+												</span>
+												<span class="light-layout">
+													<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M6.3427734,16.9501953l-1.4140625,1.4140625c-0.09375,0.09375-0.1463623,0.2208862-0.1464233,0.3534546c0,0.276123,0.2238159,0.5,0.499939,0.500061c0.1326294,0.0001831,0.2598877-0.0525513,0.3535156-0.1464844l1.4140015-1.4140625c0.0024414-0.0023804,0.0047607-0.0047607,0.0071411-0.0071411c0.1932373-0.1971436,0.1900635-0.5137329-0.0071411-0.7069702C6.8526001,16.7498169,6.5360718,16.7529907,6.3427734,16.9501953z M6.3427734,7.0498047c0.0936279,0.0939331,0.2208862,0.1466675,0.3535156,0.1464844c0.1325684,0,0.2597046-0.0526733,0.3534546-0.1464233c0.1952515-0.1952515,0.1953125-0.5118408,0.000061-0.7070923L5.6356812,4.9287109c-0.1943359-0.1904907-0.5054321-0.1904907-0.6998291,0C4.7386475,5.1220093,4.7354736,5.4385376,4.9287109,5.6357422L6.3427734,7.0498047z M12,5h0.0006104C12.2765503,4.9998169,12.5001831,4.776001,12.5,4.5v-2C12.5,2.223877,12.276123,2,12,2s-0.5,0.223877-0.5,0.5v2.0006104C11.5001831,4.7765503,11.723999,5.0001831,12,5z M17.3037109,7.1962891c0.1326294,0.0001831,0.2598877-0.0525513,0.3535156-0.1464844l1.4140625-1.4141235c0.0023804-0.0023193,0.0047607-0.0046997,0.0070801-0.0070801c0.1932983-0.1972046,0.1900635-0.5137329-0.0070801-0.7070312c-0.1972046-0.1932373-0.5137329-0.1900635-0.7070312,0.0071411l-1.4140625,1.4140625c-0.09375,0.09375-0.1463623,0.2208862-0.1464233,0.3534546C16.803772,6.9723511,17.0275879,7.196228,17.3037109,7.1962891z M5,12c0-0.276123-0.223877-0.5-0.5-0.5h-2C2.223877,11.5,2,11.723877,2,12s0.223877,0.5,0.5,0.5h2C4.776123,12.5,5,12.276123,5,12z M17.6572266,16.9502563c-0.0023804-0.0023804-0.0046997-0.0047607-0.0070801-0.0070801c-0.1972046-0.1932983-0.5137329-0.1901245-0.7070312,0.0070801c-0.1932373,0.1971436-0.1901245,0.5136719,0.0070801,0.7069702l1.4140625,1.4140625c0.0936279,0.0939331,0.2208252,0.1466675,0.3534546,0.1464844c0.1325684,0,0.2597046-0.0526733,0.3534546-0.1463623c0.1953125-0.1952515,0.1953125-0.5118408,0.0001221-0.7070923L17.6572266,16.9502563z M12,19c-0.276123,0-0.5,0.223877-0.5,0.5v2.0005493C11.5001831,21.7765503,11.723999,22.0001831,12,22h0.0006104c0.2759399-0.0001831,0.4995728-0.223999,0.4993896-0.5v-2C12.5,19.223877,12.276123,19,12,19z M21.5,11.5h-2c-0.276123,0-0.5,0.223877-0.5,0.5s0.223877,0.5,0.5,0.5h2c0.276123,0,0.5-0.223877,0.5-0.5S21.776123,11.5,21.5,11.5z M12,6.5c-3.0375366,0-5.5,2.4624634-5.5,5.5s2.4624634,5.5,5.5,5.5c3.0360107-0.0037842,5.4962158-2.4639893,5.5-5.5C17.5,8.9624634,15.0375366,6.5,12,6.5z M12,16.5c-2.4852905,0-4.5-2.0147095-4.5-4.5S9.5147095,7.5,12,7.5c2.4841309,0.0026855,4.4973145,2.0158691,4.5,4.5C16.5,14.4852905,14.4852905,16.5,12,16.5z"></path></svg>
+												</span>
+                                            </a>
+                                        </div>
+										<div class="dropdown d-md-flex">
+											<a class="nav-link icon full-screen-link nav-link-bg">
+												<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M8.5,21H3v-5.5C3,15.223877,2.776123,15,2.5,15S2,15.223877,2,15.5v6.0005493C2.0001831,21.7765503,2.223999,22.0001831,2.5,22h6C8.776123,22,9,21.776123,9,21.5S8.776123,21,8.5,21z M8.5,2H2.4993896C2.2234497,2.0001831,1.9998169,2.223999,2,2.5v6.0005493C2.0001831,8.7765503,2.223999,9.0001831,2.5,9h0.0006104C2.7765503,8.9998169,3.0001831,8.776001,3,8.5V3h5.5C8.776123,3,9,2.776123,9,2.5S8.776123,2,8.5,2z M21.5,15c-0.276123,0-0.5,0.223877-0.5,0.5V21h-5.5c-0.276123,0-0.5,0.223877-0.5,0.5s0.223877,0.5,0.5,0.5h6.0006104C21.7765503,21.9998169,22.0001831,21.776001,22,21.5v-6C22,15.223877,21.776123,15,21.5,15z M21.5,2h-6C15.223877,2,15,2.223877,15,2.5S15.223877,3,15.5,3H21v5.5005493C21.0001831,8.7765503,21.223999,9.0001831,21.5,9h0.0006104C21.7765503,8.9998169,22.0001831,8.776001,22,8.5V2.4993896C21.9998169,2.2234497,21.776001,1.9998169,21.5,2z"></path></svg>
+											</a>
+										</div>
+										<!-- FULL-SCREEN -->
+                                        
+										<div class="dropdown d-md-flex profile-1">
+											<a href="http://vacunas.test/turnos#" data-bs-toggle="dropdown" class="nav-link pe-2 leading-none d-flex animate">
+                                                												<span class="avatar avatar-md rounded-circle bg-success fs-16">A</span>
+												<div class="text-center p-1 d-flex d-lg-none-max">
+													<h6 class="mb-0" id="profile-heading">Admin<i class="user-angle ms-1 fa fa-angle-down "></i></h6>
+												</div>
+											</a>
+											<div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+												<a class="dropdown-item" href="http://vacunas.test/logout" onclick="event.preventDefault();
+                                                document.getElementById(&#39;logout-form&#39;).submit();">
+													<svg xmlns="http://www.w3.org/2000/svg" class="w-inner-icn" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path d="M10.6523438,16.140625c-0.09375,0.09375-0.1464233,0.2208862-0.1464233,0.3534546c0,0.276123,0.2238159,0.5,0.499939,0.500061c0.1326294,0.0001221,0.2598267-0.0525513,0.3534546-0.1464844l4.4941406-4.4941406c0.000061-0.000061,0.0001221-0.000061,0.0001831-0.0001221c0.1951294-0.1952515,0.1950684-0.5117188-0.0001831-0.7068481L11.359314,7.1524048c-0.1937256-0.1871338-0.5009155-0.1871338-0.6947021,0c-0.1986084,0.1918335-0.2041016,0.5083618-0.0122681,0.7069702L14.2930298,11.5H2.5C2.223877,11.5,2,11.723877,2,12s0.223877,0.5,0.5,0.5h11.7930298L10.6523438,16.140625z M16.4199829,3.0454102C11.4741821,0.5905762,5.4748535,2.6099243,3.0200195,7.5556641C2.8970337,7.8029175,2.9978027,8.1030884,3.2450562,8.2260742C3.4923706,8.3490601,3.7925415,8.248291,3.9155273,8.0010376c0.8737793-1.7612305,2.300354-3.1878052,4.0615845-4.0615845C12.428833,1.730835,17.828064,3.5492554,20.0366821,8.0010376c2.2085571,4.4517212,0.3901367,9.8509521-4.0615845,12.0595703c-4.4517212,2.2085571-9.8510132,0.3901367-12.0595703-4.0615845c-0.1229858-0.2473145-0.4231567-0.3480835-0.6704102-0.2250977c-0.2473145,0.1229858-0.3480835,0.4230957-0.2250977,0.6704102c1.6773682,3.4109497,5.1530762,5.5667114,8.9541016,5.5537109c3.7976685,0.0003662,7.2676392-2.1509399,8.9560547-5.5526733C23.3850098,11.4996338,21.3657227,5.5002441,16.4199829,3.0454102z"></path></svg>
+													Cerrar sesión
+												</a>
+                                                <form id="logout-form" action="http://vacunas.test/logout" method="POST" class="d-none">
+                                                <input type="hidden" name="_token" value="FEvR6GmjFLW5AVY4V5rZDHs74X4ZNfjIF0mrInRN">                                                </form>
+											</div>
+										</div>
+										<!-- Profile -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="jumps-prevent" style="padding-top: 74px;"></div>
+            <!-- /app-Header -->
+
+                <!--APP-SIDEBAR-->
+            <div class="sticky" style="margin-bottom: -74px;">
+                <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+                <div class="app-sidebar ps">
+                    <div class="side-header">
+                        <a class="header-brand1" href="http://vacunas.test/">
+                            <img src="./Rilla_files/logo-3.png" class="header-brand-img desktop-logo" alt="logo">
+                            <img src="./Rilla_files/logo-2.png" class="header-brand-img toggle-logo" alt="logo">
+                            <img src="./Rilla_files/logo-2.png" class="header-brand-img light-logo" alt="logo">
+                            <img src="./Rilla_files/logo-3.png" class="header-brand-img light-logo1" alt="logo">
+                        </a><!-- LOGO -->
+                    </div>
+                    <div class="main-sidemenu">
+                        <div class="slide-left disabled d-none" id="slide-left"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+                            </svg>
+                        </div>
+                                                    <ul class="side-menu" style="margin-right: 0px;">
+                                <li>
+                                    <h3>Admin</h3>
+                                </li>
+                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/roles">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon icon-tabler icon-tabler-building" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
+                                                <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0"></path>
+                                                <path d="M8 11v-4a4 4 0 1 1 8 0v4"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Roles</span>
+                                        </a>
+                                    </li>
+                                
+                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/permissions">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon icon-tabler icon-tabler-building" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z"></path>
+                                                <path d="M15 9h.01"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Permisos</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/configuracions">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-adjustments-horizontal" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M14 6m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M4 6l8 0"></path>
+                                                <path d="M16 6l4 0"></path>
+                                                <path d="M8 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M4 12l2 0"></path>
+                                                <path d="M10 12l10 0"></path>
+                                                <path d="M17 18m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+                                                <path d="M4 18l11 0"></path>
+                                                <path d="M19 18l1 0"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Configuraciones</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/users">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon icon-tabler icon-tabler-building" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                                <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Usuarios</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/ciudads">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon icon-tabler icon-tabler-building" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                                                <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Ciudades</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/obrasocials">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M3 21l18 0"></path>
+                                                <path d="M5 21v-14l8 -4v18"></path>
+                                                <path d="M19 21v-10l-6 -4"></path>
+                                                <path d="M9 9l0 .01"></path>
+                                                <path d="M9 12l0 .01"></path>
+                                                <path d="M9 15l0 .01"></path>
+                                                <path d="M9 18l0 .01"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Obras sociales</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/vacunas">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-building" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M17 3l4 4"></path>
+                                                <path d="M19 5l-4.5 4.5"></path>
+                                                <path d="M11.5 6.5l6 6"></path>
+                                                <path d="M16.5 11.5l-6.5 6.5h-4v-4l6.5 -6.5"></path>
+                                                <path d="M7.5 12.5l1.5 1.5"></path>
+                                                <path d="M10.5 9.5l1.5 1.5"></path>
+                                                <path d="M3 21l3 -3"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Vacunas</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/ciudadanosexcluidos">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon icon-tabler icon-tabler-user-x" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+                                                <path d="M6 21v-2a4 4 0 0 1 4 -4h3.5"></path>
+                                                <path d="M22 22l-5 -5"></path>
+                                                <path d="M17 22l5 -5"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Ciudadanos Excluidos</span>
+                                        </a>
+                                    </li>
+                                                            </ul>
+                                                                            <ul class="side-menu">
+                                <li>
+                                    <h3>Menu</h3>
+                                </li>
+
+                                                                    <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/turnos">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-list" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
+                                            <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+                                            <path d="M9 12l.01 0"></path>
+                                            <path d="M13 12l2 0"></path>
+                                            <path d="M9 16l.01 0"></path>
+                                            <path d="M13 16l2 0"></path>
+                                        </svg>
+                                        <span class="side-menu__label">Turnos</span>
+                                    </a>
+                                                                
+                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/ciudadanos">
+                                            <svg class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                                                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Ciudadanos</span>
+                                        </a>
+                                    </li>
+                                                                                                    <li class="slide">
+                                        <a class="side-menu__item has-link" data-bs-toggle="slide" href="http://vacunas.test/contactos">
+                                            <svg class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"></path>
+                                                <path d="M9.5 9h.01"></path>
+                                                <path d="M14.5 9h.01"></path>
+                                                <path d="M9.5 13a3.5 3.5 0 0 0 5 0"></path>
+                                            </svg>
+                                            <span class="side-menu__label">Bot</span>
+                                        </a>
+                                    </li>
+                                                            </ul>
+                                                <div class="slide-right" id="slide-right">
+                            <svg fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+            </div><div class="jumps-prevent" style="padding-top: 74px;"></div>
+
+                <!--app-content open-->
+                <div class="app-content main-content mt-0">
+                    <div class="side-app">
+
+                        <!-- CONTAINER -->
+                        <div class="main-container container-fluid">
+
+                                    <!-- PAGE-HEADER -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Lista de Turnos</h1>
+        </div>
+        <div class="ms-auto pageheader-btn">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="http://vacunas.test/turnos">Turnos</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Index</li>
+            </ol>
+        </div>
+    </div>
+    <!-- PAGE-HEADER END -->
+
+    <!-- Row -->
+        <div class="row row-sm">
+        <div class="col-lg-12">
+            <div class="card custom-card">
+                <div class="card-header border-bottom d-flex">
+
+                    <div class="main-header-center d-xl-block">
+                        <form method="POST" action="http://vacunas.test/turnos/finder" accept-charset="UTF-8"><input name="_token" type="hidden" value="FEvR6GmjFLW5AVY4V5rZDHs74X4ZNfjIF0mrInRN">
+                        <input class="form-control form-control-sm" id="buscar" name="buscar" placeholder="Buscar" type="buscar">
+                            <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" placeholder="Buscar">
+                        </form>
+                    </div>
+                    <div class="d-flex order-lg-2 ms-auto header-right-icons">
+                                                    <a href="http://vacunas.test/turnos/create" type="button" class="btn btn-sm btn-primary btn-icon active text-end"><i class="fa fa-plus"></i> Nuevo</a>
+                                            </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table border text-nowrap text-md-nowrap table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Vacuna</th>
+                                    <th>Vacunatorio</th>
+                                    <th>Cantidad</th>
+                                    <th>Edad</th>
+                                    <th>Estado</th>
+                                    <th>Obra Social</th>
+                                    <th class="text-end">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                                                    <tr>
+                                        <td>1</td>
+                                        <td>30-03-2024</td>
+                                        <td>Dengue D1</td>
+                                        <td>Gimnasio Municipal
+                                            (Virasoro)
+                                        </td>
+                                        <td>200</td>
+                                        <td>18 a 90</td>
+                                        <td>
+                                            <span class="badge rounded-pill 
+                                                                                            bg-light                                             my-1">procesado</span>
+                                        </td><td>
+                                                                                            <span class="badge rounded-pill bg-dark my-1">Todos</span>
+                                                                                    </td>
+                                        <td class="text-end">
+                                            <div aria-label="Basic example" class="btn-group my-1" role="group">
+                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/1/edit" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Editar">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/1" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ver">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/asignar/1" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Asignar Turnos">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/1/turnosciudadanos" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ciudadanos">
+                                                        <i class="fa fa-group"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/notificar/1" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Enviar notificacion Whatsapp">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
+                                                                                            </div>
+                                        </td>
+                                    </tr>
+
+                                                                    <tr>
+                                        <td>2</td>
+                                        <td>30-03-2024</td>
+                                        <td>Dengue D1</td>
+                                        <td>Gimnasio Municipal
+                                            (Virasoro)
+                                        </td>
+                                        <td>200</td>
+                                        <td>18 a 90</td>
+                                        <td>
+                                            <span class="badge rounded-pill 
+                                                                                            bg-light                                             my-1">procesado</span>
+                                        </td><td>
+                                                                                            <span class="badge rounded-pill bg-dark my-1">Todos</span>
+                                                                                    </td>
+                                        <td class="text-end">
+                                            <div aria-label="Basic example" class="btn-group my-1" role="group">
+                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/2/edit" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Editar">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/2" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ver">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/asignar/2" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Asignar Turnos">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/2/turnosciudadanos" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ciudadanos">
+                                                        <i class="fa fa-group"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/notificar/2" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Enviar notificacion Whatsapp">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
+                                                                                            </div>
+                                        </td>
+                                    </tr>
+
+                                                                    <tr>
+                                        <td>3</td>
+                                        <td>29-03-2024</td>
+                                        <td>Dengue D1</td>
+                                        <td>Club Atlético El Tala
+                                            (Corrientes)
+                                        </td>
+                                        <td>100</td>
+                                        <td>18 a 90</td>
+                                        <td>
+                                            <span class="badge rounded-pill 
+                                                                                            bg-light                                             my-1">procesado</span>
+                                        </td><td>
+                                                                                            <span class="badge rounded-pill bg-dark my-1">Todos</span>
+                                                                                    </td>
+                                        <td class="text-end">
+                                            <div aria-label="Basic example" class="btn-group my-1" role="group">
+                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/3/edit" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Editar">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/3" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ver">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/asignar/3" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Asignar Turnos">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/3/turnosciudadanos" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ciudadanos">
+                                                        <i class="fa fa-group"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/notificar/3" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Enviar notificacion Whatsapp">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
+                                                                                            </div>
+                                        </td>
+                                    </tr>
+
+                                                                    <tr>
+                                        <td>4</td>
+                                        <td>27-03-2024</td>
+                                        <td>Dengue D1</td>
+                                        <td>Gimnasio Municipal
+                                            (Virasoro)
+                                        </td>
+                                        <td>200</td>
+                                        <td>10 a 20</td>
+                                        <td>
+                                            <span class="badge rounded-pill 
+                                             bg-success
+                                                                                        my-1">cargado</span>
+                                        </td><td>
+                                                                                            <span class="badge rounded-pill bg-dark my-1">Todos</span>
+                                                                                    </td>
+                                        <td class="text-end">
+                                            <div aria-label="Basic example" class="btn-group my-1" role="group">
+                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/4/edit" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Editar">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/4" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ver">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/asignar/4" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Asignar Turnos">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/4/turnosciudadanos" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Ciudadanos">
+                                                        <i class="fa fa-group"></i>
+                                                    </a>
+                                                                                                                                                    <a class="btn btn-sm btn-primary btn-icon active" href="http://vacunas.test/turnos/notificar/4" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Enviar notificacion Whatsapp">
+                                                        <i class="fa fa-envelope"></i>
+                                                    </a>
+                                                                                            </div>
+                                        </td>
+                                    </tr>
+
+                                                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Row -->
+
+                        </div>
+                    </div>
+                </div>
+                    <!-- CONTAINER CLOSED -->
+             </div>
+
+
+            
+            <!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="row align-items-center flex-row-reverse">
+            <div class="col-md-12 col-sm-12 text-center">
+                <a href=""> Codex S.A. </a> © 2024 - Todos los derechos reservados
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- FOOTER CLOSED -->
+
+        </div>
+        <!-- Livewire Scripts -->
+
+<script src="./Rilla_files/livewire.js" data-turbo-eval="false" data-turbolinks-eval="false"></script>
+<script data-turbo-eval="false" data-turbolinks-eval="false">
+    if (window.livewire) {
+	    console.warn('Livewire: It looks like Livewire\'s @livewireScripts JavaScript assets have already been loaded. Make sure you aren\'t loading them twice.')
+	}
+
+    window.livewire = new Livewire();
+    window.livewire.devTools(true);
+    window.Livewire = window.livewire;
+    window.livewire_app_url = '';
+    window.livewire_token = 'FEvR6GmjFLW5AVY4V5rZDHs74X4ZNfjIF0mrInRN';
+
+	/* Make sure Livewire loads first. */
+	if (window.Alpine) {
+	    /* Defer showing the warning so it doesn't get buried under downstream errors. */
+	    document.addEventListener("DOMContentLoaded", function () {
+	        setTimeout(function() {
+	            console.warn("Livewire: It looks like AlpineJS has already been loaded. Make sure Livewire\'s scripts are loaded before Alpine.\\n\\n Reference docs for more info: http://laravel-livewire.com/docs/alpine-js")
+	        })
+	    });
+	}
+
+	/* Make Alpine wait until Livewire is finished rendering to do its thing. */
+    window.deferLoadingAlpine = function (callback) {
+        window.addEventListener('livewire:load', function () {
+            callback();
+        });
+    };
+
+    let started = false;
+
+    window.addEventListener('alpine:initializing', function () {
+        if (! started) {
+            window.livewire.start();
+
+            started = true;
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (! started) {
+            window.livewire.start();
+
+            started = true;
+        }
+    });
+</script>
+        <!-- page -->
+        <!-- BACK-TO-TOP -->
+        <a href="http://vacunas.test/turnos#top" id="back-to-top"><i class="fa fa-long-arrow-up"></i></a>
+
+        <!-- JQUERY JS -->
+        <link rel="stylesheet" href="./Rilla_files/jquery-ui.css">
+        <script src="./Rilla_files/jquery.min.js"></script>
+        <script src="./Rilla_files/jquery-ui.min.js"></script>
+
+        <!-- BOOTSTRAP JS -->
+        <script src="./Rilla_files/popper.min.js"></script>
+        <script src="./Rilla_files/bootstrap.min.js"></script>
+
+        <!-- SIDE-MENU JS -->
+        <script src="./Rilla_files/sidemenu.js"></script>
+
+        <!-- Perfect SCROLLBAR JS-->
+        <script src="./Rilla_files/perfect-scrollbar.js"></script>
+        <script src="./Rilla_files/pscroll.js"></script>
+
+        <!-- STICKY JS -->
+        <script src="./Rilla_files/sticky.js"></script>
+
+        
+        <!-- COLOR THEME JS -->
+        <script src="./Rilla_files/themeColors.js"></script>
+
+        <!-- CUSTOM JS -->
+        <script src="./Rilla_files/custom.js"></script>
+
+    
+
+
+<svg id="SvgjsSvg1001" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1002"></defs><polyline id="SvgjsPolyline1003" points="0,0"></polyline><path id="SvgjsPath1004" d="M0 0 "></path></svg></div><uphint-extension id="uphint-ext-root" style="pointer-events: all;
+    bottom: 0;
+    left: 0;
+    z-index: 90000000000;
+    position: absolute;"></uphint-extension></body></html>
