@@ -40,19 +40,19 @@
             zoom: 14,
         });
 
-        // points.forEach((point, index) => {
+        points.forEach((point, index) => {
         //     console.log(point);
             
         const marker = new google.maps.Marker({
-            id: points[0].id ,  
-            position: points[0],
+            id: point.id ,  
+            position: point,
             map: map,
             icon: {
                 url: "{{ asset('assets/images/thumbnails/DeU8RivW4AA5j16.png') }}",
                 scaledSize: new google.maps.Size(32, 32),
             },
-            title: points[0].title,
-            label: { text: points[0].label, color: 'transparent' },
+            title: point.title,
+            label: { text: point.label, color: 'transparent' },
         });
         const infoWindow = new google.maps.InfoWindow();
 
@@ -66,8 +66,8 @@
             // });
         markers.push(marker);
         // window.setTimeout(() => marker.setAnimation(google.maps.Animation.DROP), index * 200);
-        // });
-        setInterval(updateMarkers, 1500);
+        });
+        // setInterval(updateMarkers, 1500);
     }
 
 

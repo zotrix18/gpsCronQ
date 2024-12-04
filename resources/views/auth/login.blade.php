@@ -19,7 +19,7 @@
                             <form method="POST" action="{{ route('login') }}" class="login100-form validate-form">
                                 @csrf
                                 <div class="col col-login mx-auto text-center" style="margin-bottom: 20px; margin-top: 10px">
-                                    <h3 class="text-primary" style="font-weight: bold">Facturador</h3>
+                                    <h3 class="text-primary" style="font-weight: bold">Vehiculos</h3>
                                 </div>
                                 <br>
 

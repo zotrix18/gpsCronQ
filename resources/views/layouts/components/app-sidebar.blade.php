@@ -9,8 +9,8 @@
     <div class="app-sidebar">
         <div class="side-header">
             <a class="header-brand1" href="{{ route('home') }}">
-                <h3 class="mx-2 text-start header-brand-img light-logo1" style="font-weight: bold">Facturador</h3>
-                <h3 class="header-brand-img light-logo" style="font-weight: bold">F</h3>
+                <h3 class="mx-2 text-start header-brand-img light-logo1" style="font-weight: bold">Vehiculos</h3>
+                <h3 class="header-brand-img light-logo" style="font-weight: bold">V</h3>
             </a>
             <!-- LOGO -->
         </div>
