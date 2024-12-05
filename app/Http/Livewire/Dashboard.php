@@ -16,14 +16,14 @@ class Dashboard extends Component
 
     public function loadGpsDataUnicos($objFiltros = [])
         {
-            // $objFiltros['unidads_id'] = 1;
+            $objFiltros['unidads_id'] = 1;
             $query = DB::table('gps')
                 ->select('id', 'lat', 'lng', 'unidads_id', 'created_at')
                 ->whereNull('deleted_at');
         
             if (isset($objFiltros['unidads_id'])) {
                 // Caso 1: unidads_id especificado -> Obtener últimos 100 registros de esa unidad
-                $query->whereIn('id', function($query) use ($objFiltros) { // Aquí pasamos $objFiltros como 'use'
+                $query->whereIn('id', function($query) use ($objFiltros) { 
                     $query->select('id')
                         ->from(function($subquery) use ($objFiltros) { // Usamos 'use' para acceder a $objFiltros
                             $subquery->select(

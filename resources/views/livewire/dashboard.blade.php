@@ -16,21 +16,18 @@
 
     <div wire:ignore>
         <div id="map" style="height: 600px; width: 100%;"></div>
+        <!-- <div id="panel"></div> -->
     </div>
 
 </div>
 @script    
-
-    <script>   
+<script>   
+    const toggleSidebar = document.querySelector('#sidebar-toggle');
+    toggleSidebar.click();
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
     let map, markers = [];
     // console.clear();
-    const points = @json($gpsPoints);
-    const beachFlagImg = document.createElement("img");
-
-    beachFlagImg.src =
-    "{{ asset('assets/images/thumbnails/img48-32.png') }}";
-        // "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    const points = @json($gpsPoints);        
     const center = { lat: -27.47975561390458, lng: -58.81530992766529 };
     console.log(points);
    
@@ -52,29 +49,23 @@
             }
         });
         directionsRenderer.setMap(map);
+        // directionsRenderer.setPanel(document.getElementById("panel"));
 
         Object.keys(points).forEach(unitId => {
-            const unitPoints = points[unitId];            
-            // If unit has more than one point, create directions
-            if (unitPoints.length > 1) {
-                // Ordenar puntos de más antiguo a más reciente
-                const sortedPoints = unitPoints.sort((a, b) => a.id - b.id);
-
-                // Crear solicitud de ruta
-                const waypoints = sortedPoints.slice(1, -1).map(point => ({
+            
+            const unitPoints = points[unitId];                
+            if (unitPoints.length > 1) {                
+                const waypoints = unitPoints.slice(1, -1).map(point => ({
                     location: { lat: point.lat, lng: point.lng },
                     stopover: true
                 }));
-
                 const request = {
-                    origin: { lat: sortedPoints[0].lat, lng: sortedPoints[0].lng },
-                    destination: { lat: sortedPoints[sortedPoints.length - 1].lat, lng: sortedPoints[sortedPoints.length - 1].lng },
+                    origin: { lat: unitPoints[0].lat, lng: unitPoints[0].lng },
+                    destination: { lat: unitPoints[unitPoints.length - 1].lat, lng: unitPoints[unitPoints.length - 1].lng },
                     waypoints: waypoints,
                     optimizeWaypoints: false,
                     travelMode: google.maps.TravelMode.DRIVING
                 };
-
-                // Solicitar ruta
                 directionsService.route(request, (result, status) => {
                     if (status === 'OK') {
                         directionsRenderer.setDirections(result);
@@ -82,48 +73,51 @@
                         console.error('Error al obtener la ruta:', status);
                     }
                 });
-            }else{
-                // Si solo hay un punto, mostrar el marker
-                
-            }
-
-            // Añadir marker
-            if(unitPoints.length === 1){
-                unitPoints.forEach((point, index) => {
-                    let marker = new google.maps.marker.AdvancedMarkerElement({
-                        id: point.id,
-                        position: point,
-                        map: map,
-                        content: beachFlagImg,
-                        // icon: {
-                        //     url: "{{ asset('assets/images/thumbnails/DeU8RivW4AA5j16.png') }}",
-                        //     scaledSize: new google.maps.Size(32, 32),
-                        // },
-                        title: point.title,
-                        // label: { text: point.label, color: 'transparent' },
-                    });
-        
-                    markers.push(marker);
-                });
-            } else {
                 unitPoints.forEach((point, index) => {
                     if(index === 0 || index === unitPoints.length - 1){
+                        const imageElement = document.createElement("img");
+                        imageElement.src = "{{ asset('assets/images/thumbnails/img48-32.png') }}";
+                        imageElement.alt = `Marker for ${point.title}`;                
+
                         const marker = new google.maps.marker.AdvancedMarkerElement({
                             id: point.id,
                             position: point,
                             map: map,
-                            content: beachFlagImg,
-                            // icon: {
-                            //     url: "{{ asset('assets/images/thumbnails/DeU8RivW4AA5j16.png') }}",
-                            //     scaledSize: new google.maps.Size(32, 32),
-                            // },
-                            title: point.title,
-                            // label: { text: point.label, color: 'transparent' },
-                        });
-            
-                        markers.push(marker);                    
+                            content: imageElement,
+                            title: `${index + 1}. ${point.title}`,
+                            gmpClickable: true,
+                        });                    
                     }
                 });
+            }else{                               
+                unitPoints.forEach((point, index) => {
+                
+                const imageElement = document.createElement("img");
+                imageElement.src = "{{ asset('assets/images/thumbnails/img48-32.png') }}";
+                imageElement.alt = `Marker for ${point.title}`;                
+
+                const marker = new google.maps.marker.AdvancedMarkerElement({
+                    id: point.id,
+                    position: point,
+                    map: map,
+                    content: imageElement,
+                    title: `${index + 1}. ${point.title}`,
+                    gmpClickable: true,
+                });
+
+         
+                marker.addListener("click", () => {
+                    toggleHighlight(marker, point);
+                });
+
+            });
+            }
+
+            // Añadir marker
+            if(points[unitId].length === 1){
+                
+            } else {
+                
             }
         });
     }
