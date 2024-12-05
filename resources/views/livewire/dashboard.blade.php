@@ -20,54 +20,112 @@
 
 </div>
 @script    
+
     <script>   
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
     let map, markers = [];
+    // console.clear();
     const points = @json($gpsPoints);
+    const beachFlagImg = document.createElement("img");
+
+    beachFlagImg.src =
+    "{{ asset('assets/images/thumbnails/img48-32.png') }}";
+        // "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
+    const center = { lat: -27.47975561390458, lng: -58.81530992766529 };
     console.log(points);
+   
 
-    // const points = [
-    //     { lat: -27.4738946124587, lng: -58.83626027097935, title: 'Movil #2234', label: 'Movil #2234<br>Camion JLP-123' },
-    //     { lat: -27.47958317670583, lng: -58.84026149943679, title: 'Movil #2244', label: 'Movil #2244<br>Camion KLI-456' },
-    //     { lat: -27.464276593354278, lng: -58.839145700496516, title: 'Movil #2454', label: 'Movil #2454<br>Camion HLP-789' },
-    //     { lat: -27.478136376736884, lng: -58.796831171453995, title: 'Movil #2534', label: 'Movil #2534<br>Camion JKL-012' },
-    //     { lat: -27.485979327804785, lng: -58.82953266347266, title: 'Movil #2234', label: 'Movil #2234<br>Camion LPK-345' },
-    //     { lat: -27.464276593354278, lng: -58.78103832491478, title: 'Movil #2897', label: 'Movil #2897<br>Camion HJK-678' }
-    // ];
-
-    function initMap() {
+    function initMaps() {
         map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: -27.47975561390458, lng: -58.81530992766529 },
+            center,
             zoom: 14,
+            mapId: "DEMO_MAP_ID",
         });
 
-        points.forEach((point, index) => {
-        //     console.log(point);
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer({
+            suppressMarkers: true,
+            polylineOptions: {
+                strokeColor: "#FF0000",
+                strokeOpacity: 1,
+                strokeWeight: 3
+            }
+        });
+        directionsRenderer.setMap(map);
+
+        Object.keys(points).forEach(unitId => {
+            const unitPoints = points[unitId];            
+            // If unit has more than one point, create directions
+            if (unitPoints.length > 1) {
+                // Ordenar puntos de más antiguo a más reciente
+                const sortedPoints = unitPoints.sort((a, b) => a.id - b.id);
+
+                // Crear solicitud de ruta
+                const waypoints = sortedPoints.slice(1, -1).map(point => ({
+                    location: { lat: point.lat, lng: point.lng },
+                    stopover: true
+                }));
+
+                const request = {
+                    origin: { lat: sortedPoints[0].lat, lng: sortedPoints[0].lng },
+                    destination: { lat: sortedPoints[sortedPoints.length - 1].lat, lng: sortedPoints[sortedPoints.length - 1].lng },
+                    waypoints: waypoints,
+                    optimizeWaypoints: false,
+                    travelMode: google.maps.TravelMode.DRIVING
+                };
+
+                // Solicitar ruta
+                directionsService.route(request, (result, status) => {
+                    if (status === 'OK') {
+                        directionsRenderer.setDirections(result);
+                    } else {
+                        console.error('Error al obtener la ruta:', status);
+                    }
+                });
+            }else{
+                // Si solo hay un punto, mostrar el marker
+                
+            }
+
+            // Añadir marker
+            if(unitPoints.length === 1){
+                unitPoints.forEach((point, index) => {
+                    let marker = new google.maps.marker.AdvancedMarkerElement({
+                        id: point.id,
+                        position: point,
+                        map: map,
+                        content: beachFlagImg,
+                        // icon: {
+                        //     url: "{{ asset('assets/images/thumbnails/DeU8RivW4AA5j16.png') }}",
+                        //     scaledSize: new google.maps.Size(32, 32),
+                        // },
+                        title: point.title,
+                        // label: { text: point.label, color: 'transparent' },
+                    });
+        
+                    markers.push(marker);
+                });
+            } else {
+                unitPoints.forEach((point, index) => {
+                    if(index === 0 || index === unitPoints.length - 1){
+                        const marker = new google.maps.marker.AdvancedMarkerElement({
+                            id: point.id,
+                            position: point,
+                            map: map,
+                            content: beachFlagImg,
+                            // icon: {
+                            //     url: "{{ asset('assets/images/thumbnails/DeU8RivW4AA5j16.png') }}",
+                            //     scaledSize: new google.maps.Size(32, 32),
+                            // },
+                            title: point.title,
+                            // label: { text: point.label, color: 'transparent' },
+                        });
             
-        const marker = new google.maps.Marker({
-            id: point.id ,  
-            position: point,
-            map: map,
-            icon: {
-                url: "{{ asset('assets/images/thumbnails/DeU8RivW4AA5j16.png') }}",
-                scaledSize: new google.maps.Size(32, 32),
-            },
-            title: point.title,
-            label: { text: point.label, color: 'transparent' },
+                        markers.push(marker);                    
+                    }
+                });
+            }
         });
-        const infoWindow = new google.maps.InfoWindow();
-
-            // marker.addListener("mouseover", () => {
-            //     infoWindow.close();
-            //     infoWindow.setContent(marker.getLabel().text);
-            //     infoWindow.open(marker.getMap(), marker);
-            // });
-            // marker.addListener("mouseout", () => {
-            //     infoWindow.close();
-            // });
-        markers.push(marker);
-        // window.setTimeout(() => marker.setAnimation(google.maps.Animation.DROP), index * 200);
-        });
-        // setInterval(updateMarkers, 1500);
     }
 
 
@@ -83,7 +141,7 @@
 
     
 
-initMap();
+initMaps();
 </script>
 @endscript
 
