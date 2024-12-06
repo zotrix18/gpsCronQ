@@ -2,85 +2,119 @@
 
 namespace App\Http\Livewire;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
     public $gpsPoints = [];
+    public $empresa = null;
+    public $unidads = null;
+    public $current = [
+        'unidads' => null,
+        'fechainicio' => null,
+        'fechafin' => null,
+    ];
 
     public function mount()
     {
+        $this->empresa = session('empresa');
         $this->loadGpsDataUnicos();
+        $this->loadUnidads();
+    }
+    
+    public function loadGpsDataUnicos($objFiltros = []){
+        $query = DB::table('gps')
+        ->select(
+            'gps.id',
+            'gps.lat',
+            'gps.lng',
+            'gps.unidads_id',
+            'gps.created_at',
+            'unidads.unidad',
+            'unidads.codigo',
+            'unidads.activo'
+        )
+        ->join('unidads', 'gps.unidads_id', '=', 'unidads.id')
+        ->whereNull('gps.deleted_at'); 
+    
+    if ($this->current['fechainicio'] != null && $this->current['fechafin'] != null) {        
+        $fechainicio = Carbon::parse($this->current['fechainicio'])->format('Y-m-d H:i:s');
+        $fechafin = Carbon::parse($this->current['fechafin'])->format('Y-m-d H:i:s');                
+        $query->whereBetween('gps.created_at', [$fechainicio, $fechafin]);
+    }
+    
+    if ($this->current['unidads']) {        
+        $query->whereIn('gps.id', function ($subQuery) use ($objFiltros) {
+            $subQuery->select('id')
+                ->from(function ($subquery) use ($objFiltros) {
+                    $subquery->select(
+                        'id',
+                        'unidads_id',
+                        'created_at',
+                        'lat',
+                        'lng',
+                        DB::raw('ROW_NUMBER() OVER (PARTITION BY unidads_id, lat, lng ORDER BY id DESC) as rn')
+                    )
+                    ->from('gps')
+                    ->whereNull('deleted_at')
+                    ->where('unidads_id', $objFiltros['unidads']);
+                }, 'ranked_gps')
+                ->where('rn', '<=', 100);
+        });
+    } else {
+        
+        $query->whereIn('gps.id', function ($subQuery) {
+            $subQuery->select(DB::raw('MAX(id)'))
+                ->from('gps')
+                ->whereNull('deleted_at')
+                ->groupBy('unidads_id');
+        });
+    }
+    
+    $gpsPointsRaw = $query->get();
+    
+        
+        $this->gpsPoints = $gpsPointsRaw->groupBy('unidads_id')
+            ->map(function ($points) {
+                return $points->map(function ($point) {
+                    return [
+                        'id' => $point->id,
+                        'lat' => (float) $point->lat,
+                        'lng' => (float) $point->lng,
+                        'unidads_unidad'=>$point->unidad,
+                        'unidads_id'=>$point->unidads_id,
+                        'unidads_codigo'=>$point->codigo,
+                        'unidads_activo'=>$point->activo,                        
+                        'title' => "Unidad: " . ($point->id ?? 'N/A'),
+                        'label' => "Dispositivo: #" . ($point->codigo ?? 'N/A') . "<br>Activo: " . ($point->activo ? 'Sí' : 'No'),
+                    ];
+                })->values()->toArray();
+            })
+            ->toArray();
+    }
+    
+    private function loadUnidads(){
+        $this->unidads = DB::table('unidads')->where('empresas_id', $this->empresa->id)->whereNull('deleted_at')->get();
+        $this->dispatch('current', ['data'=> $this->current]);
     }
 
-    public function loadGpsDataUnicos($objFiltros = [])
-        {
-            $objFiltros['unidads_id'] = 1;
-            $query = DB::table('gps')
-                ->select('id', 'lat', 'lng', 'unidads_id', 'created_at')
-                ->whereNull('deleted_at');
-        
-            if (isset($objFiltros['unidads_id'])) {
-                // Caso 1: unidads_id especificado -> Obtener últimos 100 registros de esa unidad
-                $query->whereIn('id', function($query) use ($objFiltros) { 
-                    $query->select('id')
-                        ->from(function($subquery) use ($objFiltros) { // Usamos 'use' para acceder a $objFiltros
-                            $subquery->select(
-                                    'id', 
-                                    'unidads_id', 
-                                    'created_at', 
-                                    'lat', 
-                                    'lng',
-                                    DB::raw('ROW_NUMBER() OVER (PARTITION BY unidads_id, lat, lng ORDER BY id DESC) as rn')
-                                )
-                                ->from('gps')
-                                ->whereNull('deleted_at')
-                                ->where('unidads_id', $objFiltros['unidads_id']); // Aquí accedemos correctamente a $objFiltros
-                        }, 'ranked_gps')
-                        ->where(function($subquery) {
-                            // Solo tomar el registro más reciente de cada ubicación exacta
-                            $subquery->where('rn', '=', 1);
-                        });
-                });
-            } else {
-                // Caso 2: unidads_id no especificado -> Obtener el último registro de cada unidad
-                $query->whereIn('id', function ($subQuery) {
-                    $subQuery->select('id')
-                        ->from(function ($rankedQuery) {
-                            $rankedQuery->select(
-                                'id',
-                                'unidads_id',
-                                'created_at',
-                                'lat',
-                                'lng',
-                                DB::raw('ROW_NUMBER() OVER (PARTITION BY unidads_id ORDER BY created_at DESC) as rn')
-                            )
-                            ->from('gps')
-                            ->whereNull('deleted_at');
-                        }, 'ranked_gps')
-                        ->where('rn', '=', 1); // Tomar el registro más reciente por unidad
-                });
-            }
-        
-            // Ejecutar la consulta
-            $gpsPointsRaw = $query->get();
-        
-            // Transformar los datos en la estructura deseada
-            $this->gpsPoints = $gpsPointsRaw->groupBy('unidads_id')
-                ->map(function ($points) {
-                    return $points->map(function ($point) {
-                        return [
-                            'id' => $point->id,
-                            'lat' => (float)$point->lat,
-                            'lng' => (float)$point->lng,
-                            'title' => "Movil #" . ($point->id),
-                            'label' => "Dispositivo #" . ($point->unidads_id) . "<br>Último reg " . ($point->id ?? 'N/A'),
-                        ];
-                    })->values()->toArray();
-                })
-                ->toArray();
-        }
+    public function actualizarGpsPoints(){
+        $this->loadGpsDataUnicos($this->current);
+        $this->dispatch('pointsUpdated', ['data'=> $this->gpsPoints]);
+    }
+
+    public function setUnidad (){        
+        $this->loadGpsDataUnicos($this->current);
+        $this->dispatch('pointsUpdated', ['data'=> $this->gpsPoints]);
+        $this->dispatch('current', ['data'=> $this->current]);
+    }
+
+    public function actualizarFecha(){
+        $this->loadGpsDataUnicos($this->current);
+        $this->dispatch('pointsUpdated', ['data'=> $this->gpsPoints]);
+    }
 
     public function render()
     {
