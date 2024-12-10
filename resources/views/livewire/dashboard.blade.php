@@ -142,6 +142,9 @@
         }
         window.renderers = []; 
 
+        activeMarkers.forEach(marker => marker.map = null);
+        activeMarkers.clear();
+
         Object.keys(points).forEach(unitId => {
             const unitPoints = points[unitId];
 
