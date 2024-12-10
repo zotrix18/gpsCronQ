@@ -77,6 +77,7 @@
         }, 30000);        
     });
     const toggleSidebar = document.querySelector('#sidebar-toggle');
+    const imgEstatica = "{{ asset('assets/images/cars/redCar48-24.png') }}";
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
     let map, markers = [];    
     let points = @json($gpsPoints);        
@@ -221,7 +222,7 @@
                         unidads_id: point.unidads_id || 'N/A',
                         unidads_unidad: point.unidads_unidad || 'N/AA', 
                         title: point.title,
-                        pathImg: "{{ asset('assets/images/thumbnails/img48-32.png') }}"
+                        pathImg: imgEstatica
                     };
                     
                     const content = buildContent(property);
@@ -256,7 +257,7 @@
             unidads_id: point[0].unidads_id || 'N/A',
             unidads_unidad: point[0].unidads_unidad || 'N/A',
             title: point[0].title,
-            pathImg: point[0].pathImg || "{{ asset('assets/images/thumbnails/img48-32.png') }}"
+            pathImg: point[0].pathImg || imgEstatica
         };
 
         let content;
@@ -306,7 +307,7 @@
         let currentIndex = 0;
         let progress = 0;
         const ANIMATION_DURATION = 50;
-        const INTERPOLATION_STEPS = 50;
+        const INTERPOLATION_STEPS = 15;
 
         function calculateRotationAngle(start, end) {
             const startLatLng = new google.maps.LatLng(start);
@@ -493,7 +494,7 @@
             unidads_id: point.unidads_id || 'N/A',
             unidads_unidad: point.unidads_unidad || 'N/AA', 
             title: point.title,
-            pathImg: "{{ asset('assets/images/thumbnails/img48-32.png') }}"
+            pathImg: imgEstatica
         };
         
         const content = buildContent(property);

@@ -14,15 +14,11 @@ class Show extends Component
     public function mount($id)
     {
         $this->empresa_id = $id;
+        $this->empresa = Empresa::findOrFail($this->empresa_id);
     }
 
     public function render()
-    {
-        $this->empresa = Empresa::findOrFail($this->empresa_id);
-
-        return view('livewire.empresas.show', [
-            'title' => $this->title,
-            'empresa' => $this->empresa
-        ]);
+    {    
+        return view('livewire.empresas.show');
     }
 }

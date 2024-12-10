@@ -32,15 +32,10 @@ class Update extends Component
 
     public function render()
     {
-
-        $ivascategorias = IvaCategoria::get();
         $users = User::get();
-        $mediospago = MedioPago::all();
 
         return view('livewire.empresas.create', [
-            'ivascategorias' => $ivascategorias,
             'users' => $users,
-            'mediospago' => $mediospago
         ]);
     }
 }

@@ -24,24 +24,57 @@
                     <h3>Inicio</h3>
                 </li>                            
                 
-                <li class="noBeforeIcon slide ">
-                    <a class="side-menu__item has-link " data-bs-toggle="slide" role="button">
+                <li class="ps-1 slide ">
+                    <a class="side-menu__item has-link " href="{{ route('home') }}" data-bs-toggle="slide" role="button">
                     <i class="fa-solid fa-location-dot me-2"></i>
-                        <span class="side-menu__label">GPS</span>
-                        <i class="angle fa fa-angle-right"></i>
+                        <span class="side-menu__label">GPS</span>                        
                     </a>
-                    <ul class="slide-menu" disabled>                                             
-                            <li>
-                                <a class="slide-item "
-                                    href=""  
-                                    disabled                                  
-                                    >
-                                    Dispositivos
-                                </a>
-                            </li>
-                                                  
+                </li>
+
+                <li class="slide {{ request()->routeIs('conf.*') ? 'is-expanded' : '' }}">
+                    <a class="side-menu__item {{ request()->routeIs('conf.*') ? 'active' : '' }}" data-bs-toggle="slide"
+                        role="button">
+                        <i class="fa fa-cog mx-2" aria-hidden="true"></i>
+                        <span class="side-menu__label">Configuración</span><i class="angle fa fa-angle-right"></i></a>
+                    <ul class="slide-menu">
+
+                        <li>
+                            <a class="slide-item {{ request()->routeIs('empresas.index') ? 'active' : '' }}"
+                                href="{{ route('empresas.index') }}">
+                                Empresas
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="slide-item {{ request()->routeIs('conf.usuarios.index') ? 'active' : '' }}"
+                                href="{{ route('conf.usuarios.index') }}">
+                                Usuarios
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="slide-item {{ request()->routeIs('conf.roles.index') ? 'active' : '' }}"
+                                href="{{ route('roles.index') }}">
+                                Roles
+                            </a>
+                        </li>
+
+                        {{--<li>
+                            <a href="javascript:void(0)" class="slide-item">Permisos</a>
+                        </li>--}}
+                        
+                        {{--<li>
+                            <a class="slide-item {{ request()->routeIs('conf.dispositivos.index') ? 'active' : '' }}"
+                                href=""                                                                    
+                                >
+                                Dispositivos
+                            </a>
+                        </li>--}}
+
                     </ul>
                 </li>
+
+
             <div class="slide-right" id="slide-right">
                 <svg fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
                     <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z" />

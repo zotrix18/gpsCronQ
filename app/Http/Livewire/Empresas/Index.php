@@ -53,8 +53,8 @@ class Index extends Component
         // Filtra las empresas según el término de búsqueda
 
         $empresas = Empresa::where('empresa', 'like', '%' . $this->querySearch . '%')
-            ->orWhere('cuit', 'like', '%' . $this->querySearch . '%')
-            ->orWhere('direccion', 'like', '%' . $this->querySearch . '%')
+            ->orWhere('empresa', 'like', '%' . $this->querySearch . '%')
+            ->orWhere('key', 'like', '%' . $this->querySearch . '%')
             ->orderByDesc('id')
             ->paginate(10);
 
