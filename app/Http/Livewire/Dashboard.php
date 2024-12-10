@@ -13,8 +13,10 @@ class Dashboard extends Component
     public $unidads = null;
     public $current = [
         'unidads' => null,
-        'fechainicio' => null,
-        'fechafin' => null,
+        // 'fechainicio' => null,
+        // 'fechafin' => null,
+        'fechainicio' => '2024-12-09 10:50:00',
+        'fechafin' => '2024-12-09 10:55:00',
     ];
 
     public function mount()
@@ -37,9 +39,11 @@ class Dashboard extends Component
             'unidads.activo'
         )
         ->join('unidads', 'gps.unidads_id', '=', 'unidads.id')
+        ->where('gps.lat', '!=', 0)
+        ->where('gps.lng', '!=', 0)
         ->whereNull('gps.deleted_at'); 
     
-    if ($this->current['fechainicio'] != null && $this->current['fechafin'] != null) {        
+    if ($this->current['unidads'] != null && $this->current['fechainicio'] != null && $this->current['fechafin'] != null) {        
         $fechainicio = Carbon::parse($this->current['fechainicio'])->format('Y-m-d H:i:s');
         $fechafin = Carbon::parse($this->current['fechafin'])->format('Y-m-d H:i:s');                
         $query->whereBetween('gps.created_at', [$fechainicio, $fechafin]);
