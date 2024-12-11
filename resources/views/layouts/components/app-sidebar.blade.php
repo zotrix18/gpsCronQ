@@ -63,13 +63,13 @@
                             <a href="javascript:void(0)" class="slide-item">Permisos</a>
                         </li>--}}
                         
-                        {{--<li>
+                        <li>
                             <a class="slide-item {{ request()->routeIs('conf.dispositivos.index') ? 'active' : '' }}"
-                                href=""                                                                    
+                                href="{{ route('unidades.index') }}"                                                                    
                                 >
                                 Dispositivos
                             </a>
-                        </li>--}}
+                        </li>
 
                     </ul>
                 </li>

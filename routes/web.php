@@ -33,15 +33,6 @@ use App\Http\Controllers\{
 
 use App\Http\Livewire\{
     Dashboard,
-
-    // // Compras
-    // Compras\Index as ComprasIndex,
-    // Compras\Create as ComprasCreate,
-    // Compras\Detalle as ComprasDetalle,
-
-    // //Ventas
-    // Ventas\PuntoVenta as VentasPV,
-
     // Empresas
     Empresas\Index as EmpresasIndex,
     Empresas\Create as EmpresasCreate,
@@ -54,54 +45,15 @@ use App\Http\Livewire\{
     Usuarios\Create as UsuariosCrate,
     Usuarios\Update as UsuariosUpdate,
 
-    // // Productos
-    // Productos\Update as ProductosUpdate,
-    // Productos\Index as ProductosIndex,
-    // Productos\Create as ProductosCreate,
-
-    // // Productos stock
-    // ProductosStocks\Create as ProductosStocksCreate,
-
-    // // Depositos
-    // Depositos\Index as DepositosIndex,
-    // Depositos\Form as DepositosForm,
-
-
-    // // Categorias
-    // Categorias\Index as CategoriasIndex,
-    // Categorias\Create as CategoriasCreate,
-    // Categorias\Update as CategoriasUpdate,
-
+    //Roles
     Roles\Index as RolesIndex,
     Roles\Create as RolesCreate,
     Roles\Update as RolesUpdate,
 
-    // // Iva
-    // IvaCategoria\Index as IvaCategoriaIndex,
-    // IvaCategoria\Form as IvaCategoriaForm,
-
-    // // Medio pago
-    // MedioPago\Index as MedioPagoIndex,
-    // MedioPago\Form as MedioPagoForm,
-
-    // //Empresa-medios pago
-    // EmpresasMediosPago\Index as EmpresasMediosPagoIndex,
-    // EmpresasMediosPago\Create as EmpresasMediosPagoCreate,
-
-    // //Chatbot
-    // Chatbot\create as ChatBotCreate,
-    // Chatbot\Assistant as ChatBotIndex,
-    // Chatbot\Functions as ChatBotFunction,
-    // Chatbot\Files as ChatBotFiles,
-    // EmpresasMediosPago\Update as EmpresasMediosPagoUpdate,
-
-    // // Ventas
-    // Ventas\Index as VentasIndex,
-
-    // // Puntos de venta
-    // Puntosventa\Index as PuntosVentaIndex,
-    // Puntosventa\Create as PuntosVentaCreate,
-    // Puntosventa\Update as PuntosVentaUpdate
+    //Unidades
+    Unidades\Index as UnidadesIndex,
+    Unidades\Create as UnidadesCreate,
+    Unidades\Update as UnidadesUpdate,
 };
 
 
@@ -170,6 +122,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/permission/role/{id}', [PermissionController::class, 'role'])->name('permissions.role');
         Route::get('/permission/activate/{permissions_id}/{roles_id}', [PermissionController::class, 'activate'])->name('permissions.activate');
         Route::post('/permission/role/{id}/finder', [PermissionController::class, 'rolefinder'])->name('permissions.rolefinder');
+
+        //Unidades
+        Route::get('/unidades', UnidadesIndex::class)->name('unidades.index');
+        Route::get('/unidades/createe', UnidadesCreate::class)->name('unidades.create');
+        Route::get('/unidades/{id}', UnidadesUpdate::class)->name('unidades.update');
     });   
 
     

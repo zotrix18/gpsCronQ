@@ -27,6 +27,7 @@ class Dashboard extends Component
     }
     
     public function loadGpsDataUnicos($objFiltros = []){
+        $empresa = session('empresa');
         $query = DB::table('gps')
         ->select(
             'gps.id',
@@ -41,6 +42,7 @@ class Dashboard extends Component
         ->join('unidads', 'gps.unidads_id', '=', 'unidads.id')
         ->where('gps.lat', '!=', 0)
         ->where('gps.lng', '!=', 0)
+        ->where('unidads.empresas_id', $empresa->id)
         ->whereNull('gps.deleted_at'); 
     
     if ($this->current['unidads'] != null && $this->current['fechainicio'] != null && $this->current['fechafin'] != null) {        

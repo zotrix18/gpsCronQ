@@ -72,9 +72,10 @@
     window.addEventListener('DOMContentLoaded', function () {    
         setInterval(function () {                
             if(!unidads){                
-                $wire.actualizarGpsPoints();            
+                $wire.actualizarGpsPoints();   
+                console.log('actualizo');
             }        
-        }, 30000);        
+        }, 5000);        
     });
     const toggleSidebar = document.querySelector('#sidebar-toggle');
     const imgEstatica = "{{ asset('assets/images/cars/redCar48-24.png') }}";
