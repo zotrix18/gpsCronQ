@@ -3,12 +3,12 @@
 
     <div class="page-header">
         <div>
-            <h1 class="page-title">Dashboard</h1>
+            <h1 class="page-title">MAPA</h1>
         </div>
         <div class="ms-auto pageheader-btn">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0);">Inicio</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                <li class="breadcrumb-item active" aria-current="page">Mapa</li>
             </ol>
         </div>
     </div>

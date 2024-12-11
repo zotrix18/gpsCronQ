@@ -60,7 +60,10 @@
                                                 class="user-angle ms-1 fa fa-angle-down "></i></h6>
                                     </div>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">                                    
+                                    <a class="dropdown-item" href="{{ route('conf.usuarios.update', ['id' => Auth::user()->id]) }}">
+                                        <i class="fa fa-user"></i>Mi Perfil
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault();
                                                 document.getElementById('logout-form').submit();">
