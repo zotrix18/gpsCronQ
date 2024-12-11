@@ -16,7 +16,7 @@
 
 
     <div class="row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="model">Unidad</label>
             <select id="model" wire:model="current.unidads" class="form-control">
                 @if($unidads != null && $unidads)
@@ -34,7 +34,7 @@
             $minDate = $now->copy()->subDays(30); // 30 días antes de la fecha actual
         @endphp
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="fechainicio">Fecha inicio:</label>
             <input 
                 class="form-control" 
@@ -46,7 +46,7 @@
                 id="fechainicio">
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
             <label for="fechafin">Fecha fin:</label>
             <input 
                 class="form-control" 
@@ -66,39 +66,38 @@
     </div>
 
 </div>
-@script    
-<script>          
+@script
+<script>
     let unidads = null;
     window.addEventListener('DOMContentLoaded', function () {    
-        setInterval(function () {                
-            if(!unidads){                
-                $wire.actualizarGpsPoints();   
-                console.log('actualizo');
-            }        
-        }, 5000);        
+        setInterval(function () {
+            if(!unidads){
+                $wire.actualizarGpsPoints();
+            }
+        }, 5000);
     });
     const toggleSidebar = document.querySelector('#sidebar-toggle');
     const imgEstatica = "{{ asset('assets/images/cars/redCar48-24.png') }}";
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
-    let map, markers = [];    
-    let points = @json($gpsPoints);        
+    let map, markers = [];
+    let points = @json($gpsPoints);
     const center = { lat: -27.47975561390458, lng: -58.81530992766529 };
     const activeMarkers = new Map();
 
-    toggleSidebar.click();    
+    toggleSidebar.click();
 
     map = new google.maps.Map(document.getElementById('map'), {
             center,
             zoom: 14,
             mapId: "DEMO_MAP_ID",
         });
-    $wire.on('current', (data) => {         
-        unidads = data[0].data.unidads;              
-                   
+    $wire.on('current', (data) => {
+        unidads = data[0].data.unidads;
+
     });
 
     $wire.on('pointsUpdated', (data) => { 
-        points = data[0].data;    
+        points = data[0].data;
         console.log(points);
         
         initMaps();

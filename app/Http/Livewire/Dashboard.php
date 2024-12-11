@@ -13,10 +13,10 @@ class Dashboard extends Component
     public $unidads = null;
     public $current = [
         'unidads' => null,
-        // 'fechainicio' => null,
-        // 'fechafin' => null,
-        'fechainicio' => '2024-12-09 10:50:00',
-        'fechafin' => '2024-12-09 10:55:00',
+        'fechainicio' => null,
+        'fechafin' => null,
+        // 'fechainicio' => '2024-12-09 10:50:00',
+        // 'fechafin' => '2024-12-09 10:55:00',
     ];
 
     public function mount()

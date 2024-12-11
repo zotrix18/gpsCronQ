@@ -39,6 +39,7 @@
                             <tr>
                                 <th>Unidad</th>
                                 <th>Código</th>
+                                <th>Imágen</th>
                                 <th>Activo</th>
                                 <th class="text-end">Opciones</th>
                             </tr>
@@ -48,6 +49,9 @@
                                 <tr>
                                     <td>{{ $unidad->unidad }}</td>
                                     <td>{{ $unidad->codigo }}</td>
+                                    <td>
+                                        <img src="{{ $unidad->path ? asset($unidad->path) : asset('assets/images/cars/redCar48-24.png') }}" width="50">
+                                    </td>
                                     <td>
                                         <span class="badge rounded-pill bg-{{ $unidad->activo ? 'success' : 'danger' }} my-1">
                                             {{ $unidad->activo ? 'Activo' : 'Inactivo' }}
