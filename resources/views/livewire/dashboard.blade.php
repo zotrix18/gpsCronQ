@@ -193,8 +193,7 @@
                                 completeRoute = result.routes[0].overview_path;
                             } else {
                                 const currentRoute = directionsRenderer.getDirections();
-                                const newRoutes = result.routes[0];                
-                                console.log(currentRoute);
+                                const newRoutes = result.routes[0];
                                 
 
                                 currentRoute.routes[0]?.legs.push(...newRoutes?.legs);
@@ -306,8 +305,8 @@
 
         let currentIndex = 0;
         let progress = 0;
-        const ANIMATION_DURATION = 50;
-        const INTERPOLATION_STEPS = 15;
+        const ANIMATION_DURATION = 10;
+        const INTERPOLATION_STEPS = 30;
 
         function calculateRotationAngle(start, end) {
             const startLatLng = new google.maps.LatLng(start);
@@ -358,7 +357,7 @@
                 // Calcular y aplicar rotación
                 if (rotatableElement) {
                     const rotationAngle = calculateRotationAngle(routePath[currentIndex], routePath[currentIndex + 1]);
-                    console.log(rotationAngle);
+                    // console.log(rotationAngle);
                     
                     switch (rotationAngle) {
                         case -90:
