@@ -13,8 +13,8 @@ class Dashboard extends Component
     public $unidads = null;
     public $current = [
         'unidads' => null,
-        'fechainicio' => '2024-12-09 10:50:00',
-        'fechafin' => '2024-12-09 10:55:00',
+        'fechainicio' => '2024-12-04 00:00:00',
+        'fechafin' => '2024-12-04 23:59:00',
     ];
 
     public function mount()
@@ -28,20 +28,21 @@ class Dashboard extends Component
         $empresa = session('empresa');
         $query = DB::table('gps')
         ->select(
-            'gps.id',
             'gps.lat',
             'gps.lng',
-            'gps.unidads_id',
-            'gps.created_at',
-            'unidads.unidad',
-            'unidads.codigo',
-            'unidads.activo'
+            DB::raw('MIN(gps.id) as id'),
+            DB::raw('MIN(gps.unidads_id) as unidads_id'),
+            DB::raw('MIN(gps.created_at) as created_at'),
+            DB::raw('MIN(unidads.unidad) as unidad'),
+            DB::raw('MIN(unidads.codigo) as codigo'),
+            DB::raw('MIN(unidads.activo) as activo')
         )
         ->join('unidads', 'gps.unidads_id', '=', 'unidads.id')
         ->where('gps.lat', '!=', 0)
         ->where('gps.lng', '!=', 0)
         ->where('unidads.empresas_id', $empresa->id)
-        ->whereNull('gps.deleted_at'); 
+        ->whereNull('gps.deleted_at')
+        ->groupBy('gps.lat', 'gps.lng'); // Agrupa por latitud y longitud
     
         if ($this->current['unidads'] != null && $this->current['fechainicio'] != null && $this->current['fechafin'] != null) {        
             $fechainicio = Carbon::parse($this->current['fechainicio'])->format('Y-m-d H:i:s');
@@ -64,8 +65,8 @@ class Dashboard extends Component
                         ->from('gps')
                         ->whereNull('deleted_at')
                         ->where('unidads_id', $objFiltros['unidads']);
-                    }, 'ranked_gps')
-                    ->where('rn', '<=', 100);
+                    }, 'ranked_gps');                    
+                    // ->where('rn', '<=', 100);
             });
         } else {
             
@@ -104,6 +105,8 @@ class Dashboard extends Component
     private function filterNoiseData($gpsPoints) {
         $cleanedPoints = collect();
         $lastValidPoints = [];
+        $distanciaTotal = 0;
+        $cantidadDistancia = 0;
     
         foreach ($gpsPoints as $point) {
             if (!isset($lastValidPoints[$point->unidads_id])) {
@@ -119,6 +122,8 @@ class Dashboard extends Component
                 $lastPoint->lat, $lastPoint->lng, 
                 $point->lat, $point->lng
             );
+            $distanciaTotal += $distance;
+            $cantidadDistancia++;
     
             // Calcular tiempo entre puntos
             $timeDiff = abs(Carbon::parse($point->created_at)
@@ -132,10 +137,11 @@ class Dashboard extends Component
             // 1. Velocidad máxima
             // 2. Distancia mínima entre puntos
             // 3. Tiempo mínimo entre puntos
+            $promedio = $distanciaTotal / $cantidadDistancia;
             if (
                 $speed <= $maxSpeed && 
-                $distance > 10 && // más de 10 metros
-                $timeDiff > 5 // más de 5 segundos entre puntos
+                $distance > 5 && // más de 10 metros
+                $timeDiff > 14 // más de 5 segundos entre puntos
             ) {
                 $lastValidPoints[$point->unidads_id] = $point;
                 $cleanedPoints->push($point);

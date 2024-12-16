@@ -72,6 +72,8 @@
     window.addEventListener('DOMContentLoaded', function () {    
         setInterval(function () {
             if(!unidads){
+                console.log('actualizar');
+                
                 $wire.actualizarGpsPoints();
             }
         }, 5000);
@@ -98,7 +100,7 @@
 
     $wire.on('pointsUpdated', (data) => { 
         points = data[0].data;
-        console.log(points);
+        // console.log(points);
         
         initMaps();
     });
@@ -114,8 +116,8 @@
 
         if( fechaFin.value < fechaInicio.value && fechaFin.value != '' && fechaInicio.value != ''){
             alert('La fecha de inicio debe ser menor a la fecha de fin');
-            fechaInicio.value = '';
-            fechaFin.value = '';
+            // fechaInicio.value = '';
+            // fechaFin.value = '';
         }else{
             $wire.actualizarFecha();
         }
@@ -127,8 +129,8 @@
         const fechaFin = document.getElementById('fechafin');
         if( fechaFin.value < fechaInicio.value && fechaFin.value != '' && fechaInicio.value != ''){
             alert('La fecha de inicio debe ser menor a la fecha de fin');
-            fechaInicio.value = '';
-            fechaFin.value = '';
+            // fechaInicio.value = '';
+            // fechaFin.value = '';
         }else{
             $wire.actualizarFecha();
         }
@@ -149,15 +151,15 @@
         Object.keys(points).forEach(unitId => {
             const unitPoints = points[unitId];
 
+            const directionsRenderer = new google.maps.DirectionsRenderer({
+                suppressMarkers: false,
+                polylineOptions: {
+                    strokeColor: "#000000",
+                    strokeOpacity: 1,
+                    strokeWeight: 3
+                }
+            });
             if (unitPoints.length > 1) {
-                const directionsRenderer = new google.maps.DirectionsRenderer({
-                    suppressMarkers: true,
-                    polylineOptions: {
-                        strokeColor: "#000000",
-                        strokeOpacity: 1,
-                        strokeWeight: 3
-                    }
-                });
                 directionsRenderer.setMap(map);
                 window.renderers.push(directionsRenderer); 
 
@@ -170,6 +172,8 @@
                 let completeRoute = [];
 
                 routeBatches.forEach((batchPoints, batchIndex) => {
+                    console.log(batchPoints);
+                    
                     const waypoints = batchPoints.slice(1, -1).map(point => ({
                         location: { lat: point.lat, lng: point.lng },
                         stopover: true
@@ -217,6 +221,7 @@
             } else {
                 // Manejo de puntos únicos (sin ruta)
                 unitPoints.forEach((point, index) => {
+                    directionsRenderer.setDirections({ routes: [] });
                     const property = {
                         unidads_id: point.unidads_id || 'N/A',
                         unidads_unidad: point.unidads_unidad || 'N/AA', 
