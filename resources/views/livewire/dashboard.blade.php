@@ -62,6 +62,14 @@
     </div>
     <div wire:ignore>
         <div id="map" style="height: 600px; width: 100%;"></div>
+        <div class="form-group" style="max-width: 60px;margin-left: auto;">
+            <select id="update-speed" class="form-control">                
+                    <option value="5">5s</option>
+                    <option value="10">10s</option>
+                    <option value="15" selected>15s</option>
+                    <option value="600">600s</option>
+            </select>
+        </div>
         <!-- <div id="panel"></div> -->
     </div>
 
@@ -69,14 +77,25 @@
 @script
 <script>
     let unidads = null;
+    const updateSpeedSelect = document.getElementById('update-speed');
     window.addEventListener('DOMContentLoaded', function () {    
-        setInterval(function () {
-            if(!unidads){
-                console.log('actualizar');
-                
-                $wire.actualizarGpsPoints();
+        let intervalId = null;
+        const updateInterval = (speed) => {
+            if(intervalId){
+                clearInterval(intervalId);
             }
-        }, 5000);
+            intervalId = setInterval(function () {
+                if(!unidads){
+                    console.log('actualizar');
+                    
+                    $wire.actualizarGpsPoints();
+                }
+            }, speed * 1000);
+        }
+        updateSpeedSelect.addEventListener('change', function(e){
+            updateInterval(e.target.value);
+        });
+        updateInterval(updateSpeedSelect.value);
     });
     const toggleSidebar = document.querySelector('#sidebar-toggle');
     const imgEstatica = "{{ asset('assets/images/cars/redCar48-24.png') }}";
@@ -100,7 +119,7 @@
 
     $wire.on('pointsUpdated', (data) => { 
         points = data[0].data;
-        // console.log(points);
+        console.log(points);
         
         initMaps();
     });
@@ -148,11 +167,16 @@
         activeMarkers.forEach(marker => marker.map = null);
         activeMarkers.clear();
 
+        const speedControlContainer = document.getElementById('speed-control-container');
+        if (speedControlContainer) {
+            speedControlContainer.remove();
+        }
+
         Object.keys(points).forEach(unitId => {
             const unitPoints = points[unitId];
 
             const directionsRenderer = new google.maps.DirectionsRenderer({
-                suppressMarkers: false,
+                suppressMarkers: true,
                 polylineOptions: {
                     strokeColor: "#000000",
                     strokeOpacity: 1,
@@ -211,7 +235,7 @@
 
                             // Cuando se procesen todos los lotes, animar el marcador
                             if (processedBatches === totalBatches) {
-                                animateMarkerAlongRoute(completeRoute, unitId, batchPoints);
+                                initMarkerAnimation(completeRoute, unitId, batchPoints);
                             }
                         } else {
                             console.error(`Error al obtener la ruta del lote ${batchIndex}:`, status);
@@ -226,23 +250,28 @@
                         unidads_id: point.unidads_id || 'N/A',
                         unidads_unidad: point.unidads_unidad || 'N/AA', 
                         title: point.title,
-                        pathImg: imgEstatica
+                        pathImg: imgEstatica,
+                        avgSpd: point.avgSpd,
+                        speed: point.speed
                     };
                     
-                    const content = buildContent(property);
-                    
+                    const content = buildContent(property);                   
                     const marker = new google.maps.marker.AdvancedMarkerElement({
                         id: point.id,
+                        position: point,
                         position: point, 
                         map: map,
-                        content: content, 
+                        content: content,
+                        title: `${index + 1}. ${point.title}`,
                         title: `${index + 1}. ${point.title}`, 
-                        gmpClickable: true,
+                        gmpClickable: true,                       
                     });
+
                     
                     marker.addListener("click", () => {                            
                         toggleHighlight(marker, property);
                     });
+
                     
                     markers.push(marker);
                 });
@@ -250,52 +279,71 @@
         });
     }
     
-    function animateMarkerAlongRoute(routePath, unitId, point) {        
-        if (activeMarkers.has(unitId)) {
-            const existingMarker = activeMarkers.get(unitId);
-            existingMarker.map = null;
-            activeMarkers.delete(unitId);
-        }
+    function createMarkerAnimator(routePath, unitId, point) {
+        let currentIndex = 0;
+        let progress = 0;
+        let lastRotationAngle = 0;
+        
+        // Configuración inicial configurable
+        let config = {
+            interpolationSteps: 100,
+            animationDuration: 50,
+            speed: 1 // Factor de velocidad por defecto
+        };
 
+        console.log(point);
+        
         const property = {
             unidads_id: point[0].unidads_id || 'N/A',
             unidads_unidad: point[0].unidads_unidad || 'N/A',
             title: point[0].title,
-            pathImg: point[0].pathImg || imgEstatica
+            pathImg: point[0].pathImg || imgEstatica,
+            avgSpd: point[0].avgSpd || null,
+            speed: point[0].speed || null,
         };
 
-        let content;
+        console.log(property);
+        
 
-        if (property.pathImg) {
-            content = buildContent(property);
-        } else {
-            const markerContent = createMarkerContent(unitId);
+        // Función para crear contenido detallado del marcador
+        function createDetailedMarkerContent(property) {
+            // const container = document.createElement('div');
+            // container.classList.add("property", "highlight");
+            // container.style.position = 'relative';
+            // container.style.display = 'flex';
+            // container.style.alignItems = 'center';
+            // container.style.background = 'white';
+            // container.style.borderRadius = '8px';
+            // container.style.padding = '10px';
+            // container.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+            // container.style.maxWidth = '300px';
+          
+            // // Imagen
+            // const imgElement = document.createElement('img');
+            // imgElement.src = property.pathImg || imgEstatica;
+            // imgElement.style.width = '48px';
+            // imgElement.style.height = '24px';
+            // imgElement.style.marginRight = '15px';
+            // imgElement.classList.add('rotatable-point');
 
+            // Detalles
             const detailsContainer = document.createElement('div');
-            detailsContainer.style.position = 'absolute';
-            detailsContainer.style.bottom = '-40px';
-            detailsContainer.style.width = '100px';
-            detailsContainer.style.textAlign = 'center';
-            detailsContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-            detailsContainer.style.borderRadius = '4px';
-            detailsContainer.style.padding = '5px';
-            detailsContainer.style.fontSize = '12px';
-            detailsContainer.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
-
             detailsContainer.innerHTML = `
-                <div><strong>Unidad:</strong> ${property.unidads_id}</div>
-                <div><strong>Detalle:</strong> ${property.unidads_unidad}</div>
+                <strong>Unidad:</strong> ${property.unidads_id}<br>
+                <strong>Detalle:</strong> ${property.unidads_unidad}<br>
+                <strong>Velocidad Promedio:</strong> ${parseFloat(property.avgSpd).toFixed(2)} km/h
             `;
 
-            const combinedContent = document.createElement('div');
-            combinedContent.appendChild(markerContent);
-            combinedContent.appendChild(detailsContainer);
+            container.appendChild(closeButton);
+            container.appendChild(imgElement);
+            container.appendChild(detailsContainer);
 
-            content = combinedContent;
+            return container;
         }
 
-        // Selecciona el elemento que se rotará
-        const rotatableElement = content.querySelector('.rotatable-point') || content.querySelector('img');
+        const content = buildContent(property);
+
+        const rotatableElement = content.querySelector('.rotatable-point');
         if (rotatableElement) {
             rotatableElement.style.transition = 'transform 0.1s linear';
         }
@@ -306,12 +354,15 @@
             position: routePath[0]
         });
 
-        activeMarkers.set(unitId, animationMarker);
+        animationMarker.addListener("click", () => {                            
+            toggleHighlight(animationMarker, property);
+        });
 
-        let currentIndex = 0;
-        let progress = 0;
-        const ANIMATION_DURATION = 10;
-        const INTERPOLATION_STEPS = 30;
+        function setSpeed(newSpeed) {
+            config.speed = newSpeed;            
+            config.interpolationSteps = Math.max(10, Math.min(200, 100 / newSpeed));
+            config.animationDuration = Math.max(10, Math.min(100, 50 / newSpeed));
+        }
 
         function calculateRotationAngle(start, end) {
             const startLatLng = new google.maps.LatLng(start);
@@ -320,32 +371,32 @@
             const deltaLat = endLatLng.lat() - startLatLng.lat();
             const deltaLng = endLatLng.lng() - startLatLng.lng();
 
-            if (Math.abs(deltaLat) > Math.abs(deltaLng)) {
-                // Movimiento principalmente vertical
-                return deltaLat > 0 ? -90 : -270; // Hacia arriba o hacia abajo
-            } else {
-                // Movimiento principalmente horizontal
-                return deltaLng > 0 ? 0 : 180; // Hacia la derecha o hacia la izquierda
-            }
+            let angle = Math.atan2(deltaLng, deltaLat) * (180 / Math.PI);
+            angle -= 85;
+
+            return angle;
         }
 
         function smoothInterpolation(start, end, t) {
-            const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
             return {
-                lat: start.lat() + (end.lat() - start.lat()) * easeInOut(t),
-                lng: start.lng() + (end.lng() - start.lng()) * easeInOut(t)
+                lat: start.lat() + (end.lat() - start.lat()) * t,
+                lng: start.lng() + (end.lng() - start.lng()) * t
             };
         }
 
         function animateStep() {
             if (currentIndex >= routePath.length - 1) {
+                // Eliminar marcador de animación
                 animationMarker.map = null;
-                activeMarkers.delete(unitId);
-                añadirMarcador(point[point.length - 1]);
+                
+                // Añadir marcador final con todos los datos y último ángulo
+                const finalPoint = point[point.length - 1];
+                añadirMarcador(finalPoint, lastRotationAngle);
+                
                 return;
             }
 
-            progress += 1 / INTERPOLATION_STEPS;
+            progress += config.speed / config.interpolationSteps;
 
             if (progress >= 1) {
                 currentIndex++;
@@ -359,49 +410,70 @@
                 const interpolatedPosition = smoothInterpolation(startPoint, endPoint, progress);
                 animationMarker.position = interpolatedPosition;
 
-                // Calcular y aplicar rotación
                 if (rotatableElement) {
-                    const rotationAngle = calculateRotationAngle(routePath[currentIndex], routePath[currentIndex + 1]);
-                    // console.log(rotationAngle);
-                    
-                    switch (rotationAngle) {
-                        case -90:
-                            rotatableElement.style.transform = 'rotate(-90deg) scaleX(1)';
-                            break;
-                        case 90:
-                            rotatableElement.style.transform = 'rotate(90deg) scaleX(1)';
-                            break;
-                        case 180:
-                            rotatableElement.style.transform = 'rotate(180deg) scaleY(-1)';
-                            break;
-                        default:
-                            rotatableElement.style.transform = `rotate(${rotationAngle}deg) scaleX(1)`;
-                    }
-                    // if (rotationAngle === 0) {
-                    //     // Hacia la derecha, espejado
-                    //     rotatableElement.style.transform = `rotate(${rotationAngle}deg) scaleX(1)`;
-                    // } else {
-                    //     // Rotación normal para otras direcciones
-                    //     rotatableElement.style.transform = `rotate(${rotationAngle}deg) scaleX(1)`;
-                    // }
+                    lastRotationAngle = calculateRotationAngle(routePath[currentIndex], routePath[currentIndex + 1]);
+                    rotatableElement.style.transform = `rotate(${lastRotationAngle}deg)`;
                 }
             }
 
-            setTimeout(animateStep, ANIMATION_DURATION);
+            setTimeout(animateStep, config.animationDuration);
         }
-
-        animateStep();
+        
+        return {
+            start: animateStep,
+            setSpeed: setSpeed
+        };
     }
 
+    function createSpeedControlContainer() {
+        const container = document.createElement('div');
+        container.id = 'speed-control-container';
+        container.style.position = 'absolute';
+        container.style.top = '10px';
+        container.style.right = '10px';
+        container.style.background = 'white';
+        container.style.padding = '10px';
+        container.style.borderRadius = '5px';
+        container.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
+        container.style.display = 'flex';
+        container.style.gap = '5px';
 
+        const speedButtons = [
+            { label: 'x1', speed: 1 },
+            { label: 'x1.5', speed: 1.5 },
+            { label: 'x2', speed: 2 },
+            { label: 'x5', speed: 5 },
+        ];
+
+        speedButtons.forEach(({ label, speed }) => {
+            const button = document.createElement('button');
+            button.textContent = label;
+            button.style.padding = '5px 10px';
+            button.style.cursor = 'pointer';
+            button.addEventListener('click', () => {
+                currentAnimator.setSpeed(speed);
+            });
+            container.appendChild(button);
+        });
+
+        return container;
+    }
+
+    let currentAnimator;
+
+    function initMarkerAnimation(routePath, unitId, point) {
+        const speedControlContainer = createSpeedControlContainer();
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(speedControlContainer);
+
+        currentAnimator = createMarkerAnimator(routePath, unitId, point);
+        currentAnimator.start();
+    }
     function createMarkerContent(unitId) {
-        // Personalizar el contenido del marcador
         const markerDiv = document.createElement('div');
         markerDiv.style.position = 'relative';
         markerDiv.style.width = '40px';
         markerDiv.style.height = '40px';
 
-        // Crear un contenedor para la animación
         const markerContainer = document.createElement('div');
         markerContainer.style.width = '100%';
         markerContainer.style.height = '100%';
@@ -410,7 +482,6 @@
         markerContainer.style.background = 'rgba(0, 123, 255, 0.5)';
         markerContainer.style.animation = 'pulse 1.5s infinite';
 
-        // Añadir estilos de animación
         const styleSheet = document.createElement('style');
         styleSheet.textContent = `
             @keyframes pulse {
@@ -430,7 +501,6 @@
         `;
         document.head.appendChild(styleSheet);
 
-        // Icono central
         const icon = document.createElement('div');
         icon.style.position = 'absolute';
         icon.style.top = '50%';
@@ -450,23 +520,26 @@
 
     function buildContent(property) {
         const content = document.createElement("div");
-        
         content.classList.add("property");
         content.innerHTML = `
-        <div class="icon">
+        <div id="default-img" class="iconDefault rotatable-point">
+        <img src="${property.pathImg}" alt="Image for ${property.title}" style="width: 48px; height: 32px;">
+        </div>
+        <div class="icon rotatable-point">
         <img src="${property.pathImg}" alt="Image for ${property.title}" style="width: 48px; height: 32px;">
         </div>
         <div class="details">
         <div class="price">Unidad: ${property.unidads_id}</div>
-                <div class="address">Detalle: ${property.unidads_unidad}</div>
-                
-                </div>
-                `;
-                return content;
-            }
+        <div class="address">Detalle: ${property.unidads_unidad}</div>
+        <div class="address" style="display: ${property.speed ? 'block' : 'none'};">Velocidad: ${parseFloat(property.speed).toFixed(2)} km/h</div>
+        <div class="address" style="display: ${property.avgSpd ? 'block' : 'none'};">Velocidad Promedio: ${parseFloat(property.avgSpd).toFixed(2)} km/h</div>
+        </div>
+        `;
+        return content;
+    }
             
-            function toggleHighlight(markerView, property) {
-                if (markerView.content.classList.contains("highlight")) {
+    function toggleHighlight(markerView, property) {
+        if (markerView.content.classList.contains("highlight")) {
             markerView.content.classList.remove("highlight");
             markerView.zIndex = null;
         } else {
@@ -493,16 +566,22 @@
         return batches;
     }
     
-    function añadirMarcador(point){
+    function añadirMarcador(point, lastRotationAngle){
+        console.log('point', point);
+        
         const property = {
             unidads_id: point.unidads_id || 'N/A',
             unidads_unidad: point.unidads_unidad || 'N/AA', 
             title: point.title,
-            pathImg: imgEstatica
+            pathImg: imgEstatica,
+            avgSpd: point.avgSpd,
+            speed: point.speed
         };
         
         const content = buildContent(property);
-    
+        const iconElement = content.querySelector(".icon");
+        iconElement.style.transform = "rotate(" + lastRotationAngle + "deg)";
+        console.log(iconElement, lastRotationAngle);        
         const marker = new google.maps.marker.AdvancedMarkerElement({
             id: point.id,
             position: point,

@@ -5,12 +5,12 @@
             <a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-bs-toggle="sidebar" href="#"
                 id="sidebar-toggle"></a>
             <!-- sidebar-toggle-->
-            <a class="logo-horizontal " href="{{ route('home') }}">
+            {{--<a class="logo-horizontal " href="{{ route('home') }}">
                 <img src="{{ asset('assets/images/brand/logo-3.png') }}" class="header-brand-img desktop-logo"
                     alt="logo">
                 <img src="{{ asset('assets/images/brand/logo-3.png') }}" class="header-brand-img light-logo1"
                     alt="logo">
-            </a>
+            </a>--}}
             <div class="d-flex flex-fill align-items-center justify-content-center">
                 Empresa: <button class="mx-2 fw-bold border btn btn-light px-4" data-bs-toggle="modal"
                     data-bs-target="#seleccionarEmpresa" style="border-radius: 40px; color: #333 !important">

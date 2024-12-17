@@ -13,8 +13,8 @@ class Dashboard extends Component
     public $unidads = null;
     public $current = [
         'unidads' => null,
-        'fechainicio' => '2024-12-04 00:00:00',
-        'fechafin' => '2024-12-04 23:59:00',
+        'fechainicio' => '2024-12-04 20:55:00',
+        'fechafin' => '2024-12-04 20:59:00',
     ];
 
     public function mount()
@@ -35,7 +35,8 @@ class Dashboard extends Component
             DB::raw('MIN(gps.created_at) as created_at'),
             DB::raw('MIN(unidads.unidad) as unidad'),
             DB::raw('MIN(unidads.codigo) as codigo'),
-            DB::raw('MIN(unidads.activo) as activo')
+            DB::raw('MIN(unidads.activo) as activo'),
+            DB::raw('MIN(unidads.path) as path'),
         )
         ->join('unidads', 'gps.unidads_id', '=', 'unidads.id')
         ->where('gps.lat', '!=', 0)
@@ -65,11 +66,10 @@ class Dashboard extends Component
                         ->from('gps')
                         ->whereNull('deleted_at')
                         ->where('unidads_id', $objFiltros['unidads']);
-                    }, 'ranked_gps');                    
-                    // ->where('rn', '<=', 100);
+                    }, 'ranked_gps')
+                    ->where('rn', '<=', 2);
             });
         } else {
-            
             $query->whereIn('gps.id', function ($subQuery) {
                 $subQuery->select(DB::raw('MAX(id)'))
                     ->from('gps')
@@ -80,10 +80,14 @@ class Dashboard extends Component
         
         $gpsPointsRaw = $query->orderBy('gps.id', 'asc')->get();
     
-        
-        $cleanedGpsPoints = $this->filterNoiseData($gpsPointsRaw);
-
-        $this->gpsPoints = $cleanedGpsPoints->groupBy('unidads_id')
+        if ($this->current['unidads']) {
+            $cleanedGpsPoints = $this->filterNoiseData($gpsPointsRaw);
+            $this->gpsPoints = $cleanedGpsPoints->groupBy('unidads_id');
+        }else{
+            // $this->gpsPoints = $this->añadirExtraDatos($gpsPointsRaw);
+            $this->gpsPoints = $gpsPointsRaw->groupBy('unidads_id');
+        }
+        $this->gpsPoints = $this->gpsPoints
             ->map(function ($points) {
                 return $points->map(function ($point) {
                     return [
@@ -93,7 +97,9 @@ class Dashboard extends Component
                         'unidads_unidad' => $point->unidad,
                         'unidads_id' => $point->unidads_id,
                         'unidads_codigo' => $point->codigo,
-                        'unidads_activo' => $point->activo,                        
+                        'unidads_activo' => $point->activo,
+                        'avgSpd' => $point->avgSpd?? null,
+                        'speed' => $point->speed?? null,
                         'title' => "Unidad: " . ($point->id ?? 'N/A'),
                         'label' => "Dispositivo: #" . ($point->codigo ?? 'N/A') . "<br>Activo: " . ($point->activo ? 'Sí' : 'No'),
                     ];
@@ -101,12 +107,30 @@ class Dashboard extends Component
             })
             ->toArray();
     }
+
+    // private function añadirExtraDatos($gpsPoints) {        
+        //     $distance = $this->calculateDistance(
+        //         $gpsPoints[0]->lat, $gpsPoints[0]->lng, 
+        //         $gpsPoints[1]->lat, $gpsPoints[1]->lng
+        //     );
+        //     $timeDiff = abs(Carbon::parse($gpsPoints[1]->created_at)
+        //     ->diffInSeconds(Carbon::parse($gpsPoints[0]->created_at)));
+
+        //     $gpsPoints[1]->speed = ($distance / $timeDiff) * 3.6;
+        
+    // }
     
     private function filterNoiseData($gpsPoints) {
         $cleanedPoints = collect();
         $lastValidPoints = [];
-        $distanciaTotal = 0;
-        $cantidadDistancia = 0;
+        $promedio = [
+            'tiempo'=> 0,
+            'cantTiempo' => 0,
+            'distancia'=> 0,
+            'cantDistancia' => 0,
+        ];
+        // $distanciaTotal = 0;
+        // $cantidadDistancia = 0;
     
         foreach ($gpsPoints as $point) {
             if (!isset($lastValidPoints[$point->unidads_id])) {
@@ -122,36 +146,43 @@ class Dashboard extends Component
                 $lastPoint->lat, $lastPoint->lng, 
                 $point->lat, $point->lng
             );
-            $distanciaTotal += $distance;
-            $cantidadDistancia++;
+            $promedio['distancia'] += $distance;
+            $promedio['cantDistancia']++;
     
-            // Calcular tiempo entre puntos
+            // Calcular de tiempo entre puntos
             $timeDiff = abs(Carbon::parse($point->created_at)
             ->diffInSeconds(Carbon::parse($lastPoint->created_at)));
-    
-            // Velocidad máxima permitida (por ejemplo, 150 km/h)
-            $maxSpeed = 150;
-            $speed = ($distance / $timeDiff) * 3.6; // m/s a km/h
+            $promedio['tiempo'] += $timeDiff;
+            $promedio['cantTiempo']++;
+                
+            $maxSpeed = 150; // Velocidad máxima permitida
+            $speed = ($distance / $timeDiff) * 3.6; //km/h
     
             // Filtros para eliminar datos ruidosos:
             // 1. Velocidad máxima
             // 2. Distancia mínima entre puntos
             // 3. Tiempo mínimo entre puntos
-            $promedio = $distanciaTotal / $cantidadDistancia;
+            $promedioDistancia = $promedio['distancia'] / $promedio['cantDistancia']; //Promedio de distancia entre puntos
+            $promedioTiempo = $promedio['tiempo'] / $promedio['cantTiempo']; //Promedio de tiempo entre puntos
             if (
                 $speed <= $maxSpeed && 
-                $distance > 5 && // más de 10 metros
-                $timeDiff > 14 // más de 5 segundos entre puntos
+                $distance > $promedioDistancia && // Distancia minimia entre puntos
+                $timeDiff > 14 // segundos minimos entre puntos
             ) {
                 $lastValidPoints[$point->unidads_id] = $point;
+                $point->avgSpd = $promedioDistancia / $promedioTiempo;
+                $point->speed = $speed;
                 $cleanedPoints->push($point);
             }
         }
-    
+        // $velProm = $promedioDistancia/$promedioTiempo;
+        $cleanedPoints[0]->avgSpd = $promedioDistancia / $promedioTiempo;
         return $cleanedPoints;
     }
     
     private function calculateDistance($lat1, $lon1, $lat2, $lon2) {
+        //Calculo de la distancia usando la formula de haversine
+        //Esta permite obtener la distancia en metros de dos puntos
         $earth_radius = 6371000; // Radio de la Tierra en metros
     
         $dLat = deg2rad($lat2 - $lat1);

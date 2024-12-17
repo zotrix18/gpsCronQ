@@ -24,17 +24,10 @@
                     <h3>Inicio</h3>
                 </li>                            
                 
-                <li class="ps-1 slide ">
-                    <a class="side-menu__item has-link " href="{{ route('home') }}" data-bs-toggle="slide" role="button">
-                    <i class="fa-solid fa-location-dot me-2"></i>
-                        <span class="side-menu__label">GPS</span>                        
-                    </a>
-                </li>
-
                 <li class="slide {{ request()->routeIs('conf.*') ? 'is-expanded' : '' }}">
                     <a class="side-menu__item {{ request()->routeIs('conf.*') ? 'active' : '' }}" data-bs-toggle="slide"
                         role="button">
-                        <i class="fa fa-cog mx-2" aria-hidden="true"></i>
+                        <i class="fa fa-cog mx-2 me-2" aria-hidden="true"></i>
                         <span class="side-menu__label">Configuración</span><i class="angle fa fa-angle-right"></i></a>
                     <ul class="slide-menu">
 
@@ -63,17 +56,24 @@
                             <a href="javascript:void(0)" class="slide-item">Permisos</a>
                         </li>--}}
                         
-                        <li>
-                            <a class="slide-item {{ request()->routeIs('conf.dispositivos.index') ? 'active' : '' }}"
-                                href="{{ route('unidades.index') }}"                                                                    
-                                >
-                                Dispositivos
-                            </a>
-                        </li>
-
                     </ul>
+                </li>                                
+
+                <li class="ps-1 slide ">
+                    <a class="side-menu__item has-link {{ request()->routeIs('conf.dispositivos.index') ? 'active' : '' }}"
+                        href="{{ route('unidades.index') }}"                                                                    
+                        >
+                        <i class="fa fa-bullseye mx-1 me-2"></i>
+                        <span class="side-menu__label">Dispositivos</span>
+                    </a>
                 </li>
 
+                <li class="ps-1 slide ">
+                    <a class="side-menu__item has-link " href="{{ route('home') }}" data-bs-toggle="slide" role="button">
+                    <i class="fa-solid fa-location-dot mx-1 me-2"></i>
+                        <span class="side-menu__label">GPS</span>                        
+                    </a>
+                </li>
 
             <div class="slide-right" id="slide-right">
                 <svg fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
