@@ -39,18 +39,19 @@
                             <tr>
                                 <th>Unidad</th>
                                 <th>Código</th>
-                                <th>Imágen</th>
+                                <th>Imagen/Custom</th>
                                 <th>Activo</th>
                                 <th class="text-end">Opciones</th>
                             </tr>
                         </thead>
-                        <tbody wire:loading.class="opacity-50">                            
+                        <tbody wire:loading.class="opacity-50">
                             @forelse ($unidades as $unidad)
                                 <tr>
                                     <td>{{ $unidad->unidad }}</td>
                                     <td>{{ $unidad->codigo }}</td>
                                     <td>
-                                        <img src="{{ $unidad->path ? asset($unidad->path) : asset('assets/images/cars/redCar48-24.png') }}" width="50">
+                                        <img src="{{ asset($unidad->primaryPath) }}" width="50">
+                                        <img src="{{ $unidad->path ? asset('storage/' . $unidad->path) : '' }}" width="70">
                                     </td>
                                     <td>
                                         <span class="badge rounded-pill bg-{{ $unidad->activo ? 'success' : 'danger' }} my-1">

@@ -36,8 +36,8 @@ class Update extends Component{
     }
 
     //Metodo para reinicio de elementos js
-    public function resetJs(){
-        $this->dispatch('resetJs');
+    public function resetJs($value = null){
+        $this->dispatch('resetJs', $value);
     }
 
     public function setImgCustom($file){
@@ -45,16 +45,16 @@ class Update extends Component{
         $this->resetJs();
     }
 
-    public function handleFileUpload($event){
-        $file = request()->file('imgCustomPath');
+    public function handleFileUpload(){
         $this->resetJs();
     }
 
     public function save(){
-        $this->form->update();        
+        $this->form->update();
+        redirect(route('unidades.index'));    
     }
 
-    public function render(){
+    public function render(){        
         return view('livewire.unidades.create');
     }
 }

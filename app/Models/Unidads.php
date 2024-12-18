@@ -12,6 +12,8 @@ class Unidads extends Model
         'unidad',
         'codigo',
         'empresas_id',
+        'path',
+        'primaryPath',
         'activo',
     ];
 }

@@ -63,25 +63,29 @@ class UnidadesForm extends Form
         $path = null;
 
         // Verificar imagen personalizada.
-        if ($this->unidad->path) {
+        
+        //Cargar la nueva imagen
+        if($this->imgCustomPath && $this->imgCustomPath != null && $this->imgCustomPath != $this->unidad->path){
+            $basePath = "customImg/" . session('empresa')->id . "/" . $this->unidad->id;
+            $path = $this->imgCustomPath->store($basePath, 'public');
+        }else{
+            $path = $this->unidad->path;
+        }
+
+        //Verificar y eliminar la anterior si existe
+        if ($this->unidad->path && $path != $this->unidad->path) {
             //Si existe eliminar la imagen antigua
             if(Storage::exists('public/'.$this->unidad->path)){
                 Storage::disk('public')->delete($this->unidad->path);
             }
-
-            //Cargar la nueva imagen
-            // $path = $this->currentStore['file']->store('files', 'public');
-            $basePath = "customImg/". session('empresa')->id ."/". $this->unidad->id;
-            $path =  $this->imgCustomPath->store( $basePath, 'public');
-
-
         }
+
+        
 
         // Actualizar los datos.
         $this->unidad->update([
             'unidad' => $this->unidad_nombre,
-            'codigo' => $this->codigo,
-            'empresas_id' => $this->empresas_id,
+            'codigo' => $this->codigo,            
             'primaryPath' => $this->imgId,
             'path' => $path,
             'activo' => $this->activo,

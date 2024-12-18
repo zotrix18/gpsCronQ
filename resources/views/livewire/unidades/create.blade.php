@@ -73,12 +73,30 @@
                     <div class="form-group col-md-6 mb-3">
                         <label for="formFileDisabled" class="">Imagen Personalizada</label>
                         <input class="form-control @error('form.imgId') is-invalid @enderror" 
-                            wire:change="handleFileUpload"
-                            wire:model.defer="form.imgCustomPath"
-                            type="file" id="formFileDisabled" accept=".jpg,.jpeg,.png">
+                            type="file" 
+                            id="formFileDisabled" 
+                            accept=".jpg,.jpeg,.png"
+                            x-on:change="
+                                let file = $event.target.files[0];
+                                $wire.upload('form.imgCustomPath', file, () => {
+                                    $wire.call('handleFileUpload')
+                                })
+                            ">
                         @error('form.imgCustomPath')
                             <small class="error text-danger">{{ $message }}</small>
-                        @enderror
+                        @enderror                        
+                    </div>
+
+
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="formFileDisabled" class="">Observación</label>
+                        <textarea rows="10" class="form-control @error('form.observacion') is-invalid @enderror" name="observacion" wire:model="form.observacion" id=""></textarea>                    
+                    </div>
+
+                    <div class="form-group col-md-6 mb-3">
+                        @if($form->imgCustomPath && $form->imgCustomPath != null)
+                            <img src="{{ $form->imgCustomPath ? asset('storage/' . $form->imgCustomPath) : '' }}" class="img-thumbnail mx-auto mt-1" width="450px" alt="">
+                        @endif                       
                     </div>
 
                     <div class="form-group">
@@ -132,10 +150,14 @@
         dinamicSelectCart();
 
         $wire.on('resetJs', (data) => {
+            offset = data[0] || 0;
+            console.log(offset);
+            
+            
             //Eventos js que se pierden deben reiniciarse en cada actualización de componente
             setTimeout(() => {
                 dinamicSelectCart();
-            }, 0)
+            }, offset)
         });
 
 
