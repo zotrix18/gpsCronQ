@@ -6,7 +6,7 @@
         <div class="ms-auto pageheader-btn">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route('unidades.index') }}">Unidades</a>
+                    <a href="{{ route('unidades.index') }}">Listado de unidades</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">
                     Listado
@@ -40,6 +40,7 @@
                                 <th>Unidad</th>
                                 <th>Código</th>
                                 <th>Imagen/Custom</th>
+                                <th style="width: 450px;">Observaciones</th>
                                 <th>Activo</th>
                                 <th class="text-end">Opciones</th>
                             </tr>
@@ -48,11 +49,12 @@
                             @forelse ($unidades as $unidad)
                                 <tr>
                                     <td>{{ $unidad->unidad }}</td>
-                                    <td>{{ $unidad->codigo }}</td>
+                                    <td>{{ $unidad->codigo }}</td>                                    
                                     <td>
                                         <img src="{{ asset($unidad->primaryPath) }}" width="50">
                                         <img src="{{ $unidad->path ? asset('storage/' . $unidad->path) : '' }}" width="70">
                                     </td>
+                                    <td title="{{ $unidad->observaciones }}">{{ $unidad->observaciones ? Str::limit($unidad->observaciones, 40) : 'Sin observaciones' }}</td>
                                     <td>
                                         <span class="badge rounded-pill bg-{{ $unidad->activo ? 'success' : 'danger' }} my-1">
                                             {{ $unidad->activo ? 'Activo' : 'Inactivo' }}
@@ -73,6 +75,12 @@
                                                 data-bs-placement="top" data-bs-toggle="tooltip"
                                                 data-bs-original-title="Editar">
                                                 <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a class="btn btn-primary btn-icon active"
+                                                href="{{ route('unidades.update', ['id' => $unidad->id]) }}"
+                                                data-bs-placement="top" data-bs-toggle="tooltip"
+                                                data-bs-original-title="Ver">
+                                                <i class="fa fa-eye"></i>
                                             </a>
                                         </div>
                                     </td>

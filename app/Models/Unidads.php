@@ -14,6 +14,7 @@ class Unidads extends Model
         'empresas_id',
         'path',
         'primaryPath',
+        'observaciones',
         'activo',
     ];
 }

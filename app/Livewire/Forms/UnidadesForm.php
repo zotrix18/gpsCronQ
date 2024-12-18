@@ -25,6 +25,9 @@ class UnidadesForm extends Form
     #[Validate('required|string')]
     public $imgId = '';
     
+    #[Validate('nullable|string|max:150')]
+    public $observacion = '';
+
     #[Validate('boolean')]
     public $activo = true;
 
@@ -33,6 +36,7 @@ class UnidadesForm extends Form
         $this->unidad_nombre = $unidad->unidad;
         $this->codigo = $unidad->codigo;
         $this->empresas_id = $unidad->empresas_id;
+        $this->observacion = $unidad->observaciones;
         $this->imgId = $unidad->primaryPath;
         $this->imgCustomPath = $unidad->path;
         $this->activo = $unidad->activo ?? true;
@@ -44,10 +48,19 @@ class UnidadesForm extends Form
 
         $data = $this->all();
         $data['empresas_id'] = session('empresa')->id;
+        $data['primaryPath'] = $this->imgId;
         $data['unidad'] = $this->unidad_nombre;
         $data['activo'] = false;
 
-        Unidads::create($data);
+        $newUnidad = Unidads::create($data);
+        //Guardado de imagen
+        if($this->imgCustomPath ){
+            $basePath = "images/" . session('empresa')->id . "/" . $newUnidad->id; //images/empresa_id/unidad_id
+            $path = $this->imgCustomPath->store($basePath, 'public'); 
+            $newUnidad->path = $path;
+            $newUnidad->update();
+        }
+
         $this->reset();
     }
 
@@ -66,7 +79,7 @@ class UnidadesForm extends Form
         
         //Cargar la nueva imagen
         if($this->imgCustomPath && $this->imgCustomPath != null && $this->imgCustomPath != $this->unidad->path){
-            $basePath = "customImg/" . session('empresa')->id . "/" . $this->unidad->id;
+            $basePath = "images/" . session('empresa')->id . "/" . $this->unidad->id; //images/empresa_id/unidad_id
             $path = $this->imgCustomPath->store($basePath, 'public');
         }else{
             $path = $this->unidad->path;
@@ -85,7 +98,8 @@ class UnidadesForm extends Form
         // Actualizar los datos.
         $this->unidad->update([
             'unidad' => $this->unidad_nombre,
-            'codigo' => $this->codigo,            
+            'codigo' => $this->codigo,
+            'observaciones' => $this->observacion,    
             'primaryPath' => $this->imgId,
             'path' => $path,
             'activo' => $this->activo,

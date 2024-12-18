@@ -90,7 +90,10 @@
 
                     <div class="form-group col-md-6 mb-3">
                         <label for="formFileDisabled" class="">Observación</label>
-                        <textarea rows="10" class="form-control @error('form.observacion') is-invalid @enderror" name="observacion" wire:model="form.observacion" id=""></textarea>                    
+                        <textarea rows="10" class="form-control @error('form.observacion') is-invalid @enderror" name="observacion" wire:model.defer="form.observacion" id=""></textarea>                    
+                        @error('form.observacion')
+                            <small class="error text-danger">{{ $message }}</small>
+                        @enderror 
                     </div>
 
                     <div class="form-group col-md-6 mb-3">

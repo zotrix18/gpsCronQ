@@ -201,3 +201,7 @@
   height: 1.5em;
   vertical-align: -1.525em;
 }
+
+.w-fc{
+  width: fit-content!important;
+}
