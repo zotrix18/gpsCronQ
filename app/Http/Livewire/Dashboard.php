@@ -35,7 +35,9 @@ class Dashboard extends Component
             DB::raw('MIN(gps.created_at) as created_at'),
             DB::raw('MIN(unidads.unidad) as unidad'),
             DB::raw('MIN(unidads.codigo) as codigo'),
+            DB::raw('MIN(unidads.observaciones) as obs'),
             DB::raw('MIN(unidads.activo) as activo'),
+            DB::raw('MIN(unidads.primaryPath) as primaryPath'),
             DB::raw('MIN(unidads.path) as path'),
         )
         ->join('unidads', 'gps.unidads_id', '=', 'unidads.id')
@@ -98,6 +100,9 @@ class Dashboard extends Component
                         'unidads_id' => $point->unidads_id,
                         'unidads_codigo' => $point->codigo,
                         'unidads_activo' => $point->activo,
+                        'primaryPath' => $point->primaryPath,
+                        'obs' => $point->obs ?? 'Sin observaciones',
+                        'path' => $point->path,
                         'avgSpd' => $point->avgSpd?? null,
                         'speed' => $point->speed?? null,
                         'title' => "Unidad: " . ($point->id ?? 'N/A'),

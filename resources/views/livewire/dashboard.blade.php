@@ -104,6 +104,7 @@
     let points = @json($gpsPoints);
     const center = { lat: -27.47975561390458, lng: -58.81530992766529 };
     const activeMarkers = new Map();
+    console.log(points);
 
     toggleSidebar.click();
 
@@ -250,7 +251,9 @@
                         unidads_id: point.unidads_id || 'N/A',
                         unidads_unidad: point.unidads_unidad || 'N/AA', 
                         title: point.title,
-                        pathImg: imgEstatica,
+                        obs: point.obs,
+                        primaryPath: point.primaryPath,
+                        path: point.path ? '{{asset('storage/')}}/' + point.path : point.primaryPath,
                         avgSpd: point.avgSpd,
                         speed: point.speed
                     };
@@ -291,13 +294,13 @@
             speed: 1 // Factor de velocidad por defecto
         };
 
-        console.log(point);
-        
         const property = {
             unidads_id: point[0].unidads_id || 'N/A',
             unidads_unidad: point[0].unidads_unidad || 'N/A',
             title: point[0].title,
-            pathImg: point[0].pathImg || imgEstatica,
+            obs: point[0].obs,
+            primaryPath: point[0].primaryPath,
+            path: point[0].path,
             avgSpd: point[0].avgSpd || null,
             speed: point[0].speed || null,
         };
@@ -523,14 +526,14 @@
         content.classList.add("property");
         content.innerHTML = `
         <div id="default-img" class="iconDefault rotatable-point">
-        <img src="${property.pathImg}" alt="Image for ${property.title}" style="width: 48px; height: 32px;">
+        <img src="${property.primaryPath}" alt="Primary Image" style="width: 48px; height: 32px;">
         </div>
         <div class="icon rotatable-point">
-        <img src="${property.pathImg}" alt="Image for ${property.title}" style="width: 48px; height: 32px;">
+        <img src="${property.path}" alt="CustomImg" style="width: 100px; height: auto;">
         </div>
         <div class="details">
         <div class="price">Unidad: ${property.unidads_id}</div>
-        <div class="address">Detalle: ${property.unidads_unidad}</div>
+        <div class="address">Detalle: ${property.obs}</div>
         <div class="address" style="display: ${property.speed ? 'block' : 'none'};">Velocidad: ${parseFloat(property.speed).toFixed(2)} km/h</div>
         <div class="address" style="display: ${property.avgSpd ? 'block' : 'none'};">Velocidad Promedio: ${parseFloat(property.avgSpd).toFixed(2)} km/h</div>
         </div>
@@ -573,7 +576,9 @@
             unidads_id: point.unidads_id || 'N/A',
             unidads_unidad: point.unidads_unidad || 'N/AA', 
             title: point.title,
-            pathImg: imgEstatica,
+            obs: point.obs,
+            primaryPath: point.primaryPath,
+            path: point.path,
             avgSpd: point.avgSpd,
             speed: point.speed
         };
