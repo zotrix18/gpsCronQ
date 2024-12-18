@@ -98,7 +98,7 @@
         updateInterval(updateSpeedSelect.value);
     });
     const toggleSidebar = document.querySelector('#sidebar-toggle');
-    const imgEstatica = "{{ asset('assets/images/cars/redCar48-24.png') }}";
+    const imgEstatica = "{{ asset('assets/images/cars/redCar.png') }}";
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary("marker");
     let map, markers = [];
     let points = @json($gpsPoints);

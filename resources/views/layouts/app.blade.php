@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJ26HvcKulycOxiXGWasm60NnniILp_Co&loading=async"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/dynamicSelect.css')}}">
     <script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
+    <script src="{{ asset('assets/js/dynamicSelect.js')}}"></script>
 
 
     @include('layouts.components.styles')

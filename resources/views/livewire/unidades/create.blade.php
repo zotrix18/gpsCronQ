@@ -49,7 +49,37 @@
                         @error('form.codigo')
                             <small class="error text-danger">{{ $message }}</small>
                         @enderror
-                    </div>                                        
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="imgId">Imagen Primaria</label>
+                        <input  id="imgIdHidden" type="hidden" wire:model="currentStore.imgPrimary">
+                        <select id="imgId"
+                            class="form-control @error('form.imgId')
+                            is-invalid @enderror"
+                            wire:model.defer="form.imgId"
+                            data-dynamic-select
+                            >
+                            <option value="">Seleccione una imagen</option>
+                            @foreach ($imgs as $img)
+                                <option value="{{$img['path']}}" {{$form->imgId == $img['path'] ? 'selected' : ''}} data-img="{{ asset( $img['path']) }}">{{ $img['nombre']}}</option>
+                            @endforeach
+                        </select>
+                        @error('form.imgId')
+                            <small class="error text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-6 mb-3">
+                        <label for="formFileDisabled" class="">Imagen Personalizada</label>
+                        <input class="form-control @error('form.imgId') is-invalid @enderror" 
+                            wire:change="handleFileUpload"
+                            wire:model.defer="form.imgCustomPath"
+                            type="file" id="formFileDisabled" accept=".jpg,.jpeg,.png">
+                        @error('form.imgCustomPath')
+                            <small class="error text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
 
                     <div class="form-group">
                         <p class="mt-2 mb-6">Los campos marcados con (*) son obligatorios</p>
@@ -79,5 +109,35 @@
             loader.classList.add('fade-out');
             setTimeout(() => loader.classList.add('d-none'), 500);
         }, 200);
+
+        // document.getElementById('formFileDisabled').addEventListener('change', (e) => {              
+        //     setTimeout(() => {
+        //         $wire.resetJs();
+        //     }, 500);        
+        // })
+
+        const dinamicSelectCart = () => {
+            new DynamicSelect('#imgId', {
+                // width: '200px',
+                placeholder: 'Seleccione',
+                name: 'imgId',
+                value: '{{ $form->imgId }}',
+                onChange: function(value, text, option) {
+                    @this.set('form.imgId', value);
+                    $wire.resetJs();
+                }
+            });        
+        }
+
+        dinamicSelectCart();
+
+        $wire.on('resetJs', (data) => {
+            //Eventos js que se pierden deben reiniciarse en cada actualización de componente
+            setTimeout(() => {
+                dinamicSelectCart();
+            }, 0)
+        });
+
+
     </script>
 @endscript
