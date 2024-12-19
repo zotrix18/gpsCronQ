@@ -28,7 +28,7 @@ class EmpresaForm extends Form
 
         $this->empresa = $this->emp->empresa;
         $this->key = $this->emp->key;
-        $this->logo = $this->emp->logo;
+        $this->logo = $this->emp->logoPath;
     }
 
     public function store()

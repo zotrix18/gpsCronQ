@@ -64,21 +64,14 @@
                         @error('empresa.logo')
                             <small class="error text-danger">{{ $message }}</small>
                         @enderror
-                    </div>     
-                    @if ($empresa->logo)                          
-                        <div class="form-group col-md-6">
-                            <label for="key">Logo</label>
-                            <input class="form-control @error('empresa.logo') is-invalid @enderror" 
-                                type="file" 
-                                id="formFileDisabled" 
-                                accept=".jpg,.jpeg,.png"
-                                wire:model.defer="empresa.logo"
-                                >
-                            @error('empresa.logo')
-                                <small class="error text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>              
-                    @endif                 
+                    
+                            @if ($empresa->logo && $empresa->logo != null)
+                            <div class="mx-auto w-fc">
+                                <img src="{{ $empresa->logo ? asset('storage/' . $empresa->logo) : '' }}" class="img-thumbnail mx-auto mt-1" width="450px" alt="">
+                            </div>
+                            @endif
+                    </div>
+
 
                     <div class="form-group">
                         <p class="mt-2 mb-6">Los campos marcados con (*) son obligatorios</p>

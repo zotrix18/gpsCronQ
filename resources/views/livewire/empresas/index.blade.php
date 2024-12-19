@@ -42,6 +42,7 @@
                                 <tr>
                                     <th>Empresa</th>
                                     <th>KEY</th>                                  
+                                    <th style="width: 250px;">Logo</th>
                                     <th class="text-end">Opciones</th>
                                 </tr>
                             </thead>
@@ -50,6 +51,7 @@
                                     <tr>
                                         <td>{{ $empresa->empresa }}</td>
                                         <td>{{ $empresa->key }}</td>                                                                              
+                                        <td><img src="{{ $empresa->logoPath ? asset('storage/' . $empresa->logoPath) : '' }}" width="150"></td>                                                                              
                                         <td class="text-end">
                                             <div aria-label="Basic example" class="my-1 btn-group btn-group-sm"
                                                 role="group">
