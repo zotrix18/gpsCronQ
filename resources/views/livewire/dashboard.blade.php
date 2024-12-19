@@ -300,35 +300,13 @@
             title: point[0].title,
             obs: point[0].obs,
             primaryPath: point[0].primaryPath,
-            path: point[0].path,
+            path: point[0].path ? '{{asset('storage/')}}/' + point[0].path : point[0].primaryPath,
             avgSpd: point[0].avgSpd || null,
             speed: point[0].speed || null,
         };
-
-        console.log(property);
         
-
         // Función para crear contenido detallado del marcador
         function createDetailedMarkerContent(property) {
-            // const container = document.createElement('div');
-            // container.classList.add("property", "highlight");
-            // container.style.position = 'relative';
-            // container.style.display = 'flex';
-            // container.style.alignItems = 'center';
-            // container.style.background = 'white';
-            // container.style.borderRadius = '8px';
-            // container.style.padding = '10px';
-            // container.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-            // container.style.maxWidth = '300px';
-          
-            // // Imagen
-            // const imgElement = document.createElement('img');
-            // imgElement.src = property.pathImg || imgEstatica;
-            // imgElement.style.width = '48px';
-            // imgElement.style.height = '24px';
-            // imgElement.style.marginRight = '15px';
-            // imgElement.classList.add('rotatable-point');
-
             // Detalles
             const detailsContainer = document.createElement('div');
             detailsContainer.innerHTML = `
@@ -528,7 +506,7 @@
         <div id="default-img" class="iconDefault rotatable-point">
         <img src="${property.primaryPath}" alt="Primary Image" style="width: 48px; height: 32px;">
         </div>
-        <div class="icon rotatable-point">
+        <div class="icon">
         <img src="${property.path}" alt="CustomImg" style="width: 100px; height: auto;">
         </div>
         <div class="details">
@@ -570,7 +548,6 @@
     }
     
     function añadirMarcador(point, lastRotationAngle){
-        console.log('point', point);
         
         const property = {
             unidads_id: point.unidads_id || 'N/A',
@@ -578,13 +555,13 @@
             title: point.title,
             obs: point.obs,
             primaryPath: point.primaryPath,
-            path: point.path,
+            path: point.path ? '{{asset('storage/')}}/' + point.path : point.primaryPath,
             avgSpd: point.avgSpd,
             speed: point.speed
         };
         
         const content = buildContent(property);
-        const iconElement = content.querySelector(".icon");
+        const iconElement = content.querySelector("#default-img");
         iconElement.style.transform = "rotate(" + lastRotationAngle + "deg)";
         console.log(iconElement, lastRotationAngle);        
         const marker = new google.maps.marker.AdvancedMarkerElement({

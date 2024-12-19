@@ -61,6 +61,7 @@
   flex: 1;
   color: #222222;
   font-size: 16px;
+  max-width: 300px;
 }
 
 .property .address {
@@ -95,7 +96,7 @@
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
-  height: 100px;
+  height: auto;
   padding: 8px 15px;
   width: auto;
   top: 15px;
