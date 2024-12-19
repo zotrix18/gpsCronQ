@@ -53,6 +53,33 @@
                         @enderror
                     </div>                               
 
+                    <div class="form-group col-md-6">
+                        <label for="key">Logo</label>
+                        <input class="form-control @error('empresa.logo') is-invalid @enderror" 
+                            type="file" 
+                            id="formFileDisabled" 
+                            accept=".jpg,.jpeg,.png"
+                            wire:model.defer="empresa.logo"
+                            >
+                        @error('empresa.logo')
+                            <small class="error text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>     
+                    @if ($empresa->logo)                          
+                        <div class="form-group col-md-6">
+                            <label for="key">Logo</label>
+                            <input class="form-control @error('empresa.logo') is-invalid @enderror" 
+                                type="file" 
+                                id="formFileDisabled" 
+                                accept=".jpg,.jpeg,.png"
+                                wire:model.defer="empresa.logo"
+                                >
+                            @error('empresa.logo')
+                                <small class="error text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>              
+                    @endif                 
+
                     <div class="form-group">
                         <p class="mt-2 mb-6">Los campos marcados con (*) son obligatorios</p>
                         <button type="submit" class="btn btn-primary" style="min-width: 150px; min-height: 32px">

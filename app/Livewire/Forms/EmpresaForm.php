@@ -19,12 +19,16 @@ class EmpresaForm extends Form
     #[Validate('required|string|max:125')]
     public $key = '';
 
+    #[Validate('nullable')]
+    public $logo = null;
+
     public function setEmpresa(Empresa $empresa)
     {
         $this->emp = $empresa;
 
         $this->empresa = $this->emp->empresa;
         $this->key = $this->emp->key;
+        $this->logo = $this->emp->logo;
     }
 
     public function store()

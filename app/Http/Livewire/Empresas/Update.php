@@ -8,9 +8,11 @@ use App\Models\User;
 use Livewire\Component;
 use App\Models\Empresa;
 use App\Models\MedioPago;
+use Livewire\WithFileUploads;
 
 class Update extends Component
 {
+    use WithFileUploads;
     public EmpresaForm $empresa;
     public $title = 'Actualizar empresa';
 
