@@ -54,6 +54,7 @@ use App\Http\Livewire\{
     Unidades\Index as UnidadesIndex,
     Unidades\Create as UnidadesCreate,
     Unidades\Update as UnidadesUpdate,
+    Unidades\Show as UnidadesShow,
 };
 
 
@@ -127,6 +128,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/unidades', UnidadesIndex::class)->name('unidades.index');
         Route::get('/unidades/createe', UnidadesCreate::class)->name('unidades.create');
         Route::get('/unidades/{id}', UnidadesUpdate::class)->name('unidades.update');
+        Route::get('/unidades/{id}/show', UnidadesShow::class)->name('unidades.show');
     });   
 
     

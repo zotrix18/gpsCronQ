@@ -13,6 +13,7 @@ class Update extends Component{
     use WithFileUploads;
     public $title = "Actualizar Unidad";
     public UnidadesForm $form;
+    public $show = false;
     public $unidad_id = null;
     public $unidad = null;
     public $currentStore = [

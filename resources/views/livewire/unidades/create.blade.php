@@ -1,4 +1,17 @@
 <div>
+@section('styles')
+<style>
+.onlyShow::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+</style>
+@endsection
     <!-- PAGE-HEADER -->
     <div class="page-header">
         <div>
@@ -31,7 +44,7 @@
                 </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body {{ $show? 'onlyShow' : '' }}">
                 <form class="row row-sm form-horizontal" wire:submit.prevent="save">
                     <div class="form-group col-md-6">
                         <label for="unidad_nombre">Unidad *</label>
@@ -70,7 +83,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group col-md-6 mb-3">
+                    <div class="form-group col-md-6 mb-3" style="opacity: {{ $show? '0' : '1' }}">
                         <label for="formFileDisabled" class="">Imagen Personalizada</label>
                         <input class="form-control @error('form.imgId') is-invalid @enderror" 
                             type="file" 
@@ -102,6 +115,7 @@
                         @endif                       
                     </div>
 
+                    @if(!$show)
                     <div class="form-group">
                         <p class="mt-2 mb-6">Los campos marcados con (*) son obligatorios</p>
                         <button type="submit" class="btn btn-primary" style="min-width: 150px; min-height: 32px">
@@ -115,6 +129,7 @@
                             </div>
                         </button>
                     </div>
+                    @endif
                 </form>
             </div>
         </div>
