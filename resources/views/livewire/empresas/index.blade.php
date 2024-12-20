@@ -27,7 +27,7 @@
                         </form>
                     </div>
                     <div class="d-flex order-lg-2 ms-auto header-right-icons">
-                        <a href="/empresas/create" type="button" class="btn btn-primary btn-icon active text-end"
+                        <a href="{{ route('empresas.create') }}" type="button" class="btn btn-primary btn-icon active text-end"
                             >
                             <i class="mx-2 fa fa-plus"></i>
                             Nueva
@@ -36,6 +36,11 @@
                 </div>
 
                 <div class="card-body">
+                    @if (session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session('message') }}
+                        </div>
+                    @endif
                     <div class="table-responsive">
                         <table class="table border text-nowrap text-md-nowrap table-hover">
                             <thead>

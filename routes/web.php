@@ -9,26 +9,6 @@ use App\Http\Controllers\{
     // PermissionController,
     // ConfiguracionesController,
     // ChatbotController,
-
-
-    // CategoriasController,
-    // EmpresaController,
-    // ProductosController,
-
-    // TurnosController,
-    // VacunasController,
-    // VacunatoriosController,
-    // ObrasocialsController,
-
-    // ConfiguracionsController,
-    // CiudadanosController,
-    // CiudadanosExcluidoController,
-    // CiudadsController,
-    // ContactosController,
-    // InformeController,
-    // PdfController,
-    // TurnosciudadanosController,
-    // UsersvacunatoriosController
 };
 
 use App\Http\Livewire\{
@@ -108,8 +88,8 @@ Route::middleware(['auth'])->group(function () {
 
         //Empresas
         Route::get('/empresas', EmpresasIndex::class)->name('empresas.index');
-        Route::get('/empresas/{id}/usuarios', EmpresasSelectUser::class)->name('empresas.users');
         Route::get('/empresas/create', EmpresasCreate::class)->name('empresas.create');
+        Route::get('/empresas/{id}/usuarios', EmpresasSelectUser::class)->name('empresas.users');
         Route::get('/empresas/{id}/update', EmpresasUpdate::class)->name('empresas.update');
         Route::get('/empresas/{id}/ver', EmpresasShow::class)->name('empresas.show');
 

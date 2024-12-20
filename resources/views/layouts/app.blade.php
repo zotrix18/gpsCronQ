@@ -28,7 +28,14 @@
 
     <!-- GLOBAL-LOADER -->
     <div id="global-loader">
-        <img src="{{ asset('assets/images/loader.svg') }}" class="loader-img" alt="Loader">
+        @php
+        use Illuminate\Support\Facades\Storage;
+        @endphp
+        @if(session('empresa')->logoPath && session('empresa')->logoPath && Storage::exists('public/'.session('empresa')->logoPath))
+            <img src="{{ asset('storage/' . session('empresa')->logoPath) }}" width="200px" class="loader-img spring-image" alt="Loader" style="top: calc((100dvh - 200px) / 2)!important;">
+        @else
+            <img src="{{ asset('assets/images/loader.svg') }}" class="loader-img" alt="Loader">
+        @endif
     </div>
     <!-- /GLOBAL-LOADER -->
 

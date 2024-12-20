@@ -203,6 +203,28 @@
   vertical-align: -1.525em;
 }
 
-.w-fc{
-  width: fit-content!important;
+.w-fc {
+  width: fit-content !important;
+}
+
+.spring-image {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0) scale(1, 1);
+  }
+  30% {
+    transform: translateY(-150px) scale(1.1, 0.9); /* Salto hacia arriba */
+  }
+  50% {
+    transform: translateY(0) scale(1.2, 0.8); /* Al caer, se aplasta */
+  }
+  70% {
+    transform: translateY(-75px) scale(0.9, 1.1); /* Rebote más pequeño */
+  }
+  100% {
+    transform: translateY(0) scale(1, 1); /* Retorna a la posición original */
+  }
 }

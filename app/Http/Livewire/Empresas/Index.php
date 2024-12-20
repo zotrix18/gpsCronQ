@@ -48,20 +48,18 @@ class Index extends Component
         }
     }
 
-    public function render()
-    {
-        // Filtra las empresas según el término de búsqueda
-
-        $empresas = Empresa::where('empresa', 'like', '%' . $this->querySearch . '%')
-            ->orWhere('empresa', 'like', '%' . $this->querySearch . '%')
-            ->orWhere('key', 'like', '%' . $this->querySearch . '%')
+    public function render(){
+        $empresas = Empresa::where(function ($query) {
+                $query->where('empresa', 'like', '%' . $this->querySearch . '%')
+                      ->orWhere('key', 'like', '%' . $this->querySearch . '%');
+            })
+            ->whereNull('deleted_at')
             ->orderByDesc('id')
             ->paginate(10);
-
-
-
+    
         return view('livewire.empresas.index', [
             'empresas' => $empresas
         ]);
     }
+    
 }

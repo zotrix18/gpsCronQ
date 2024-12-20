@@ -8,9 +8,11 @@ use App\Models\IvaCategoria;
 use App\Models\User;
 use App\Models\MedioPago;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Create extends Component
 {
+    use WithFileUploads;
     public EmpresaForm $empresa;
     public $title = 'Crear empresa';
 
@@ -26,17 +28,7 @@ class Create extends Component
 
     public function render()
     {
-
-        $this->dispatch('alertaExito');
-        $ivascategorias = IvaCategoria::get();
-        $users = User::get();
-        $mediospago = MedioPago::all();
-
-        return view('livewire.empresas.create', [
-            'ivascategorias' => $ivascategorias,
-            'users' => $users,
-            'mediospago' => $mediospago
-        ]);
+        return view('livewire.empresas.create');
     }
 }
 

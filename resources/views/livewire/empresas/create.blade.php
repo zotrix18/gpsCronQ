@@ -51,23 +51,29 @@
                         @error('empresa.key')
                             <small class="error text-danger">{{ $message }}</small>
                         @enderror
-                    </div>                               
+                    </div>
 
                     <div class="form-group col-md-6">
                         <label for="key">Logo</label>
-                        <input class="form-control @error('empresa.logo') is-invalid @enderror" 
-                            type="file" 
-                            id="formFileDisabled" 
+                        <input class="form-control @error('empresa.logoPath') is-invalid @enderror" 
+                            type="file"
+                            id="formFileDisabled"
                             accept=".jpg,.jpeg,.png"
-                            wire:model.defer="empresa.logo"
+                            wire:model="empresa.logoPath"
                             >
-                        @error('empresa.logo')
+                        @error('empresa.logoPath')
                             <small class="error text-danger">{{ $message }}</small>
                         @enderror
                     
-                            @if ($empresa->logo && $empresa->logo != null)
+                            @if ($empresa->logoPath && $empresa->logoPath != null && !method_exists($empresa->logoPath, 'temporaryUrl'))
                             <div class="mx-auto w-fc">
-                                <img src="{{ $empresa->logo ? asset('storage/' . $empresa->logo) : '' }}" class="img-thumbnail mx-auto mt-1" width="450px" alt="">
+                                <img src="{{ $empresa->logoPath ? asset('storage/' . $empresa->logoPath) : '' }}" class="img-thumbnail mx-auto mt-1" width="450px" alt="">
+                            </div>
+                            @endif
+                            @if ($empresa->logoPath && method_exists($empresa->logoPath, 'temporaryUrl'))
+                            <div class="mx-auto w-fc">
+                                <img src="{{ $empresa->logoPath->temporaryUrl() }}" class="img-thumbnail danger mx-auto mt-1" width="450px" alt="">
+                                <p class="mt-2 mb-6 text-center text-danger">Debe guardar los cambios para conservar la imagen*</p>
                             </div>
                             @endif
                     </div>
